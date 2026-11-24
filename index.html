@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Shopee Video Generator 9:16 v3.1 — Perbaikan Impor CSV & Suara TTS</title>
+  <title>Shopee Video Generator 9:16 v3.2 — Progress % & Fix 5 Foto</title>
   <style>
     :root {
       --primary: #ee4d2d;
@@ -83,9 +83,32 @@
       width: 100%; max-width: 315px; aspect-ratio: 9 / 16; background: #000;
       border-radius: 16px; border: 2px solid var(--border); box-shadow: 0 12px 30px rgba(0,0,0,0.45);
     }
+    .progress-box {
+      width: 100%; margin-top: 12px; background: #0f172a; border: 1px solid var(--border);
+      border-radius: 10px; padding: 10px;
+    }
+    .progress-header {
+      display: flex; justify-content: space-between; font-size: 0.84rem; font-weight: 700;
+      color: #f8fafc; margin-bottom: 6px;
+    }
+    .progress-track {
+      width: 100%; height: 10px; background: #1e293b; border-radius: 999px; overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%; width: 0%; background: linear-gradient(90deg, #ee4d2d, #facc15);
+      transition: width 0.1s linear;
+    }
     .status-bar {
-      margin-top: 12px; width: 100%; text-align: center; font-size: 0.84rem;
+      margin-top: 10px; width: 100%; text-align: center; font-size: 0.84rem;
       padding: 8px 10px; border-radius: 8px; background: #0f172a; color: #cbd5e1; border: 1px solid var(--border);
+    }
+    .download-link-box {
+      display: none; margin-top: 10px; width: 100%; text-align: center;
+    }
+    .download-link-box.show { display: block; }
+    .download-anchor {
+      display: inline-block; width: 100%; background: #059669; color: #fff; text-decoration: none;
+      padding: 10px 12px; border-radius: 8px; font-weight: 700; font-size: 0.88rem;
     }
     .tips { font-size: 0.8rem; color: var(--muted); margin-top: 10px; line-height: 1.45; }
     .pill-info {
@@ -97,15 +120,14 @@
 <body>
   <div class="container">
     <header>
-      <h1>🎬 Shopee Video Generator <span class="badge">v3.1 • Fix CSV &amp; Suara TTS</span></h1>
-      <div style="font-size:0.84rem; color:#94a3b8;">100% Gratis • Sinkron Google Sheets • Siap Upload</div>
+      <h1>🎬 Shopee Video Generator <span class="badge">v3.2 • Progress % &amp; 5 Foto Fix</span></h1>
+      <div style="font-size:0.84rem; color:#94a3b8;">Simpan ke Storage HP / Perangkat</div>
     </header>
 
     <div class="grid">
       <div class="panel">
         <h2>1. Data Produk &amp; Pengaturan Konten</h2>
 
-        <!-- IMPOR CSV / PASTE DARI GOOGLE SHEETS -->
         <div class="sub-box sheets-box">
           <div class="sub-box-title">
             <span>📊 Impor Data dari Google Sheets</span>
@@ -129,7 +151,7 @@
           </div>
           <div id="sheetImportStatus" class="pill-info" style="display:none;"></div>
 
-          <div class="import-drawer open" id="importDrawer">
+          <div class="import-drawer" id="importDrawer">
             <div class="row-2" style="margin-bottom:10px;">
               <div>
                 <label>Opsi A: Pilih File CSV / TSV / TXT</label>
@@ -182,7 +204,6 @@
           <input type="text" id="ctaText" value="Cek Keranjang Oranye Sebelum Kehabisan 👇" maxlength="55" />
         </div>
 
-        <!-- VOICE OVER OTOMATIS -->
         <div class="sub-box">
           <div class="sub-box-title">
             <span>🎙️ Voice Over Otomatis (Text-to-Speech)</span>
@@ -219,7 +240,6 @@
           </div>
         </div>
 
-        <!-- MUSIK LATAR BAWAAN -->
         <div class="sub-box">
           <div class="sub-box-title">
             <span>🎵 Musik Latar Bawaan (Tanpa Upload File)</span>
@@ -255,9 +275,9 @@
           <div class="form-group">
             <label>Durasi / Foto</label>
             <select id="slideDuration">
+              <option value="2" selected>2 Detik (Cepat)</option>
               <option value="2.5">2.5 Detik</option>
-              <option value="3" selected>3 Detik</option>
-              <option value="4">4 Detik</option>
+              <option value="3">3 Detik</option>
             </select>
           </div>
           <div class="form-group">
@@ -281,14 +301,29 @@
           <button type="button" class="main-btn btn-primary" id="exportBtn">⬇ Generate &amp; Download Video</button>
         </div>
         <p class="tips">
-          💡 <strong>Info Suara Perangkat:</strong> Sebagian browser/OS (terutama server atau mode tertentu) tidak menginstal paket suara TTS sistem, sehingga daftar suara bawaan bisa kosong. Aplikasi tetap menyediakan opsi <strong>Suara Bawaan Browser (id-ID)</strong> serta <strong>subtitle otomatis</strong> di layar.
+          📱 <strong>Lokasi File Hasil Download:</strong> Video tersimpan ke <strong>storage lokal HP/perangkat</strong> (folder <em>Download</em> / <em>Unduhan</em>), bukan langsung ke Google Drive. Jika browser HP memblokir download otomatis, gunakan tombol <strong>Simpan File Video ke HP</strong> yang muncul setelah proses 100%.
         </p>
       </div>
 
       <div class="panel preview-wrap">
-        <h2 style="width:100%;">2. Pratinjau Layar 9:16</h2>
+        <h2 style="width:100%;">2. Pratinjau &amp; Progress Generate</h2>
         <canvas id="videoCanvas" width="720" height="1280"></canvas>
-        <div class="status-bar" id="statusBar">Siap digunakan. Impor CSV/Paste atau unggah foto produk.</div>
+
+        <div class="progress-box">
+          <div class="progress-header">
+            <span id="progressLabel">Progress Generate</span>
+            <span id="progressPercent">0%</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+        </div>
+
+        <div class="download-link-box" id="downloadLinkBox">
+          <a href="#" class="download-anchor" id="manualDownloadAnchor" download="shopee-video-9x16.webm">💾 Simpan File Video ke Storage HP</a>
+        </div>
+
+        <div class="status-bar" id="statusBar">Siap digunakan. Pilih 1–5 foto lalu klik Generate &amp; Download Video.</div>
       </div>
     </div>
   </div>
@@ -306,13 +341,19 @@
     const sheetProductSelect = document.getElementById('sheetProductSelect');
     const prevItemBtn = document.getElementById('prevItemBtn');
     const nextItemBtn = document.getElementById('nextItemBtn');
+    const progressFill = document.getElementById('progressFill');
+    const progressPercent = document.getElementById('progressPercent');
+    const progressLabel = document.getElementById('progressLabel');
+    const downloadLinkBox = document.getElementById('downloadLinkBox');
+    const manualDownloadAnchor = document.getElementById('manualDownloadAnchor');
 
     let loadedImages = [];
-    let animFrameId = null;
+    let animTimerId = null;
     let isRecording = false;
     let availableVoices = [];
     let previewSynthStop = null;
     let importedProducts = [];
+    let currentObjectUrl = null;
 
     const themes = {
       shopee: { bgTop: '#ee4d2d', bgBot: '#ff7337', card: '#ffffff', text: '#1e293b', badgeBg: '#facc15', badgeText: '#111827', hookBg: '#111827', hookText: '#ffffff' },
@@ -320,6 +361,13 @@
       clean:  { bgTop: '#f1f5f9', bgBot: '#cbd5e1', card: '#ffffff', text: '#0f172a', badgeBg: '#ee4d2d', badgeText: '#ffffff', hookBg: '#0f172a', hookText: '#ffffff' },
       dark:   { bgTop: '#090d16', bgBot: '#1e293b', card: '#111827', text: '#f8fafc', badgeBg: '#f59e0b', badgeText: '#111827', hookBg: '#f59e0b', hookText: '#090d16' }
     };
+
+    function updateProgressUI(pct, labelText) {
+      const clamped = Math.max(0, Math.min(100, Math.round(pct)));
+      progressFill.style.width = clamped + '%';
+      progressPercent.textContent = clamped + '%';
+      if (labelText) progressLabel.textContent = labelText;
+    }
 
     // ================= 0. IMPOR CSV / PASTE GOOGLE SHEETS =================
     document.getElementById('toggleImportBtn').addEventListener('click', () => {
@@ -332,7 +380,6 @@
 ').replace(//g, '
 ').trim();
       if (!text) return [];
-
       const lines = text.split('
 ').filter(l => l.trim() !== '');
       const firstLine = lines[0];
@@ -350,12 +397,8 @@
           const ch = line[i];
           const next = line[i + 1];
           if (ch === '"') {
-            if (inQuotes && next === '"') {
-              cur += '"';
-              i++;
-            } else {
-              inQuotes = !inQuotes;
-            }
+            if (inQuotes && next === '"') { cur += '"'; i++; }
+            else { inQuotes = !inQuotes; }
           } else if (ch === delimiter && !inQuotes) {
             cols.push(cur.trim());
             cur = '';
@@ -366,7 +409,6 @@
         cols.push(cur.trim());
         if (cols.some(c => c !== '')) rows.push(cols);
       });
-
       return rows;
     }
 
@@ -378,19 +420,16 @@
 
     function processImportedRows(rows) {
       if (!rows || !rows.length) {
-        statusBar.textContent = 'Data CSV/teks kosong atau tidak terbaca.';
+        statusBar.textContent = 'Data kosong atau tidak terbaca.';
         return;
       }
-
       const firstRowLower = rows[0].map(c => (c || '').toLowerCase());
       const hasHeader = firstRowLower.some(c =>
         c.includes('nama produk') || c.includes('caption') || c.includes('hook') ||
         c.includes('harga') || c.includes('promo') || c.includes('link') || c.includes('status')
       );
-
       let colMap = { name: 0, hook: 1, link: 2, hashtag: 3, imageUrl: 4, status: 5, vo: 6, price: -1 };
       let dataRows = rows;
-
       if (hasHeader) {
         dataRows = rows.slice(1);
         firstRowLower.forEach((h, idx) => {
@@ -401,7 +440,6 @@
           else if (h.includes('naskah') || h.includes('vo') || h.includes('narasi')) colMap.vo = idx;
         });
       }
-
       const parsed = dataRows.map((r, idx) => {
         const name = (r[colMap.name] || '').trim() || `Produk #${idx + 1}`;
         const hook = (r[colMap.hook] || '').trim() || `REKOMENDASI ${name.toUpperCase()}`;
@@ -412,11 +450,7 @@
         return { name, hook, price, imageUrl, vo };
       }).filter(item => item.name && item.name !== '-');
 
-      if (!parsed.length) {
-        statusBar.textContent = 'Tidak ada baris produk yang bisa dimuat.';
-        return;
-      }
-
+      if (!parsed.length) return;
       importedProducts = parsed;
       sheetProductSelect.innerHTML = '';
       importedProducts.forEach((item, i) => {
@@ -425,15 +459,12 @@
         opt.textContent = `${i + 1}. ${item.name} — ${item.price}`;
         sheetProductSelect.appendChild(opt);
       });
-
       sheetProductSelect.disabled = false;
       prevItemBtn.disabled = importedProducts.length <= 1;
       nextItemBtn.disabled = importedProducts.length <= 1;
-
       const statusPill = document.getElementById('sheetImportStatus');
       statusPill.style.display = 'inline-block';
       statusPill.textContent = `✔ ${importedProducts.length} produk siap dipilih di dropdown`;
-
       applyProductFromSheet(0);
     }
 
@@ -445,102 +476,30 @@
       document.getElementById('hookText').value = item.hook.slice(0, 75);
       document.getElementById('priceTag').value = item.price.slice(0, 35);
       document.getElementById('voScript').value = item.vo;
-
-      if (item.imageUrl && /^https?:\/\//i.test(item.imageUrl)) {
-        const img = new Image();
-        img.crossOrigin = 'anonymous';
-        img.onload = () => {
-          loadedImages = [img];
-          thumbList.innerHTML = '';
-          const thumb = document.createElement('img');
-          thumb.src = item.imageUrl;
-          thumbList.appendChild(thumb);
-          drawFrame(0, 0.3, 0.1);
-          statusBar.textContent = `Memuat "${item.name}" beserta gambar URL.`;
-        };
-        img.onerror = () => {
-          drawFrame(0, 0.3, 0.1);
-          statusBar.textContent = `Data "${item.name}" dimuat (unggah foto lokal jika URL gambar terblokir).`;
-        };
-        img.src = item.imageUrl;
-      } else {
-        drawFrame(0, 0.3, 0.1);
-        statusBar.textContent = `Produk "${item.name}" aktif (${index + 1}/${importedProducts.length}).`;
-      }
+      drawFrame(0, 0.3, 0.1);
+      statusBar.textContent = `Produk "${item.name}" aktif (${index + 1}/${importedProducts.length}).`;
     }
 
     sheetProductSelect.addEventListener('change', (e) => {
       const idx = parseInt(e.target.value, 10);
       if (!Number.isNaN(idx)) applyProductFromSheet(idx);
     });
-
     prevItemBtn.addEventListener('click', () => {
       if (!importedProducts.length) return;
       const cur = parseInt(sheetProductSelect.value, 10) || 0;
-      const prev = (cur - 1 + importedProducts.length) % importedProducts.length;
-      applyProductFromSheet(prev);
+      applyProductFromSheet((cur - 1 + importedProducts.length) % importedProducts.length);
     });
-
     nextItemBtn.addEventListener('click', () => {
       if (!importedProducts.length) return;
       const cur = parseInt(sheetProductSelect.value, 10) || 0;
-      const next = (cur + 1) % importedProducts.length;
-      applyProductFromSheet(next);
-    });
-
-    function handleParsePasteAction() {
-      const area = document.getElementById('pasteSheetsArea');
-      let raw = area.value.trim();
-      if (!raw) {
-        // Jika kotak kosong, isi otomatis contoh lalu proses agar tombol tetap langsung berfungsi
-        raw = getSampleCsvText();
-        area.value = raw;
-      }
-      processImportedRows(parseDelimitedText(raw));
-    }
-
-    document.getElementById('parsePasteBtn').addEventListener('click', handleParsePasteAction);
-
-    const csvFileInputEl = document.getElementById('csvFileInput');
-    csvFileInputEl.addEventListener('change', (e) => {
-      const file = e.target.files && e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        const text = ev.target && ev.target.result ? String(ev.target.result) : '';
-        document.getElementById('pasteSheetsArea').value = text;
-        processImportedRows(parseDelimitedText(text));
-      };
-      reader.onerror = () => {
-        statusBar.textContent = 'Gagal membaca file CSV.';
-      };
-      reader.readAsText(file, 'UTF-8');
-    });
-
-    document.getElementById('fetchUrlBtn').addEventListener('click', async () => {
-      const url = document.getElementById('sheetCsvUrl').value.trim();
-      if (!url) {
-        statusBar.textContent = 'Masukkan link CSV Google Sheets terlebih dahulu.';
-        return;
-      }
-      statusBar.textContent = 'Mengambil data CSV dari Google Sheets...';
-      try {
-        const res = await fetch(url);
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        const text = await res.text();
-        document.getElementById('pasteSheetsArea').value = text;
-        processImportedRows(parseDelimitedText(text));
-      } catch (err) {
-        statusBar.textContent = 'URL CSV tidak dapat diakses langsung (CORS). Gunakan Upload File CSV atau Copy-Paste.';
-      }
+      applyProductFromSheet((cur + 1) % importedProducts.length);
     });
 
     function getSampleCsvText() {
       return [
         "Nama Produk,Caption,Link Affiliate,Hashtag,URL Gambar,Status,Naskah VO",
-        "Kipas Mini Turbo Portable,"Gerah pas di jalan? Anginnya kenceng banget! Diskon Rp 39.000",https://s.shopee.co.id/contoh1,#racunshopee,,READY,"Gerah pas lagi di jalan? Cobain kipas mini turbo ini! Anginnya kenceng banget dan lagi diskon jadi tiga puluh sembilan ribu aja. Cek keranjang oranye sekarang!"",
-        "Lampu Tidur Proyektor Bintang,"Kamar estetik kayak di luar angkasa cuma Rp 45.000!",https://s.shopee.co.id/contoh2,#dekorasikamar,,READY,"Pengen kamar tidur jadi estetik dan nyaman? Pasang lampu proyektor bintang ini! Harganya cuma empat puluh lima ribuan. Klik keranjang oranye sebelum kehabisan!"",
-        "TWS Bluetooth Bass Mantap,"Suara ngebass baterai awet, promo Rp 59.000 hari ini!",https://s.shopee.co.id/contoh3,#gadgetmurah,,READY,"Cari TWS murah tapi suaranya ngebass dan jernih? Ini pilihannya! Baterai awet seharian dan lagi promo lima puluh sembilan ribu. Buruan checkout sekarang!""
+        "Kipas Mini Turbo Portable,"Gerah pas di jalan? Anginnya kenceng banget! Diskon Rp 39.000",https://s.shopee.co.id/contoh1,#racunshopee,,READY,"Gerah pas lagi di jalan? Cobain kipas mini turbo ini! Anginnya kenceng banget dan lagi diskon jadi tiga puluh sembilan ribu aja."",
+        "Lampu Tidur Proyektor Bintang,"Kamar estetik kayak di luar angkasa cuma Rp 45.000!",https://s.shopee.co.id/contoh2,#dekorasikamar,,READY,"Pengen kamar tidur jadi estetik dan nyaman? Pasang lampu proyektor bintang ini! Harganya cuma empat puluh lima ribuan.""
       ].join('
 ');
     }
@@ -553,63 +512,63 @@
 
     document.getElementById('loadSampleBtn').addEventListener('click', applySampleAction);
     document.getElementById('loadSampleDirectBtn').addEventListener('click', applySampleAction);
+    document.getElementById('parsePasteBtn').addEventListener('click', () => {
+      const area = document.getElementById('pasteSheetsArea');
+      if (!area.value.trim()) area.value = getSampleCsvText();
+      processImportedRows(parseDelimitedText(area.value));
+    });
 
-    // ================= 1. SETUP WEB SPEECH API (VOICE OVER) =================
+    document.getElementById('csvFileInput').addEventListener('change', (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        const text = String(ev.target.result || '');
+        document.getElementById('pasteSheetsArea').value = text;
+        processImportedRows(parseDelimitedText(text));
+      };
+      reader.readAsText(file, 'UTF-8');
+    });
+
+    document.getElementById('fetchUrlBtn').addEventListener('click', async () => {
+      const url = document.getElementById('sheetCsvUrl').value.trim();
+      if (!url) return;
+      statusBar.textContent = 'Mengambil data CSV...';
+      try {
+        const res = await fetch(url);
+        const text = await res.text();
+        document.getElementById('pasteSheetsArea').value = text;
+        processImportedRows(parseDelimitedText(text));
+      } catch (err) {
+        statusBar.textContent = 'Gagal ambil URL (CORS). Gunakan Upload CSV atau Copy-Paste.';
+      }
+    });
+
+    // ================= 1. VOICE OVER (TTS) =================
     function populateVoices() {
       voiceSelect.innerHTML = '';
-      const defaultOpt = document.createElement('option');
-      defaultOpt.value = '__auto_id__';
-      defaultOpt.textContent = 'Suara Bawaan Browser (id-ID)';
-      voiceSelect.appendChild(defaultOpt);
-
-      if (!('speechSynthesis' in window)) {
-        const noApiOpt = document.createElement('option');
-        noApiOpt.value = '__none__';
-        noApiOpt.textContent = 'TTS Tidak Didukung (Mode Subtitle Aktif)';
-        voiceSelect.appendChild(noApiOpt);
-        return;
-      }
-
+      const defOpt = document.createElement('option');
+      defOpt.value = '__auto_id__';
+      defOpt.textContent = 'Suara Bawaan Browser (id-ID)';
+      voiceSelect.appendChild(defOpt);
+      if (!('speechSynthesis' in window)) return;
       try {
         availableVoices = speechSynthesis.getVoices() || [];
-      } catch (e) {
-        availableVoices = [];
-      }
-
-      if (availableVoices.length > 0) {
-        const sorted = [...availableVoices].sort((a, b) => {
-          const aId = (a.lang || '').toLowerCase().includes('id') ? -1 : 1;
-          const bId = (b.lang || '').toLowerCase().includes('id') ? -1 : 1;
-          return aId - bId;
-        });
-
-        sorted.forEach((voice) => {
+        availableVoices.forEach((v) => {
           const opt = document.createElement('option');
-          opt.value = voice.name;
-          opt.textContent = `${voice.name} (${voice.lang})`;
-          if ((voice.lang || '').toLowerCase().includes('id')) {
-            opt.selected = true;
-          }
+          opt.value = v.name;
+          opt.textContent = `${v.name} (${v.lang})`;
+          if ((v.lang || '').toLowerCase().includes('id')) opt.selected = true;
           voiceSelect.appendChild(opt);
         });
-      } else {
-        const fallbackOpt = document.createElement('option');
-        fallbackOpt.value = '__system_default__';
-        fallbackOpt.textContent = 'Suara Sistem Default (Perangkat Tanpa Daftar Suara)';
-        voiceSelect.appendChild(fallbackOpt);
-      }
+      } catch (e) {}
     }
 
     if ('speechSynthesis' in window) {
       populateVoices();
       if (typeof speechSynthesis.addEventListener === 'function') {
         speechSynthesis.addEventListener('voiceschanged', populateVoices);
-      } else {
-        speechSynthesis.onvoiceschanged = populateVoices;
       }
-      setTimeout(populateVoices, 500);
-    } else {
-      populateVoices();
     }
 
     document.getElementById('refreshVoicesBtn').addEventListener('click', () => {
@@ -620,23 +579,18 @@
     function speakNarration() {
       if (!document.getElementById('voEnable').checked) return;
       const script = document.getElementById('voScript').value.trim();
-      if (!script) return;
-      if (!('speechSynthesis' in window)) return;
-
+      if (!script || !('speechSynthesis' in window)) return;
       try {
         speechSynthesis.cancel();
         const utter = new SpeechSynthesisUtterance(script);
         utter.lang = 'id-ID';
         utter.rate = parseFloat(document.getElementById('voiceRate').value) || 1.05;
-
         if (voiceSelect.value && !voiceSelect.value.startsWith('__')) {
           const chosen = availableVoices.find(v => v.name === voiceSelect.value);
           if (chosen) utter.voice = chosen;
         }
         speechSynthesis.speak(utter);
-      } catch (e) {
-        statusBar.textContent = 'Suara TTS dilewati oleh browser; subtitle tetap tampil di video.';
-      }
+      } catch (e) {}
     }
 
     document.getElementById('testVoiceBtn').addEventListener('click', () => {
@@ -644,12 +598,11 @@
       statusBar.textContent = 'Menjalankan tes suara narasi & subtitle...';
     });
 
-    // ================= 2. BUILT-IN WEB AUDIO SYNTH MUSIC =================
+    // ================= 2. BUILT-IN MUSIC =================
     function startBuiltInMusic(audioCtx, destinationNode, preset) {
       if (preset === 'none') return () => {};
-
       const masterGain = audioCtx.createGain();
-      masterGain.gain.value = 0.16;
+      masterGain.gain.value = 0.14;
       masterGain.connect(destinationNode);
       masterGain.connect(audioCtx.destination);
 
@@ -666,71 +619,40 @@
       const intervalId = setInterval(() => {
         if (stopped || audioCtx.state === 'closed') return;
         const now = audioCtx.currentTime;
-
         const osc = audioCtx.createOscillator();
         const noteGain = audioCtx.createGain();
         osc.type = cfg.type;
         osc.frequency.setValueAtTime(cfg.notes[stepIdx % cfg.notes.length], now);
-
         noteGain.gain.setValueAtTime(0.001, now);
-        noteGain.gain.exponentialRampToValueAtTime(0.35, now + 0.02);
+        noteGain.gain.exponentialRampToValueAtTime(0.3, now + 0.02);
         noteGain.gain.exponentialRampToValueAtTime(0.001, now + stepSec * 0.9);
-
         osc.connect(noteGain);
         noteGain.connect(masterGain);
         osc.start(now);
         osc.stop(now + stepSec);
-
-        if (stepIdx % 2 === 0) {
-          const kick = audioCtx.createOscillator();
-          const kickGain = audioCtx.createGain();
-          kick.type = 'sine';
-          kick.frequency.setValueAtTime(135, now);
-          kick.frequency.exponentialRampToValueAtTime(42, now + 0.12);
-          kickGain.gain.setValueAtTime(0.6, now);
-          kickGain.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
-          kick.connect(kickGain);
-          kickGain.connect(masterGain);
-          kick.start(now);
-          kick.stop(now + 0.15);
-        }
-
         stepIdx++;
       }, stepSec * 1000);
 
-      return () => {
-        stopped = true;
-        clearInterval(intervalId);
-      };
+      return () => { stopped = true; clearInterval(intervalId); };
     }
 
     document.getElementById('testMusicBtn').addEventListener('click', () => {
       if (previewSynthStop) {
-        previewSynthStop();
-        previewSynthStop = null;
+        previewSynthStop(); previewSynthStop = null;
         statusBar.textContent = 'Tes musik dihentikan.';
         return;
       }
       const preset = document.getElementById('musicPreset').value;
-      if (preset === 'none') {
-        statusBar.textContent = 'Pilih salah satu musik latar terlebih dahulu.';
-        return;
-      }
+      if (preset === 'none') return;
       const ctxAudio = new (window.AudioContext || window.webkitAudioContext)();
-      const dummyDest = ctxAudio.createMediaStreamDestination();
-      const stopFn = startBuiltInMusic(ctxAudio, dummyDest, preset);
+      const dest = ctxAudio.createMediaStreamDestination();
+      const stopFn = startBuiltInMusic(ctxAudio, dest, preset);
       statusBar.textContent = 'Memutar tes musik latar (4 detik)...';
-      previewSynthStop = () => {
-        stopFn();
-        ctxAudio.close();
-        previewSynthStop = null;
-      };
-      setTimeout(() => {
-        if (previewSynthStop) previewSynthStop();
-      }, 4000);
+      previewSynthStop = () => { stopFn(); ctxAudio.close(); previewSynthStop = null; };
+      setTimeout(() => { if (previewSynthStop) previewSynthStop(); }, 4000);
     });
 
-    // ================= 3. CANVAS RENDERING & SUBTITLE =================
+    // ================= 3. UPLOAD 1–5 FOTO (FIX ASYNC ORDER & VALIDATION) =================
     function createPlaceholderImage() {
       const off = document.createElement('canvas');
       off.width = 720; off.height = 720;
@@ -754,31 +676,37 @@
     const placeholderImg = createPlaceholderImage();
     placeholderImg.onload = () => drawFrame(0, 0.35, 0.15);
 
-    imageInput.addEventListener('change', (e) => {
-      const files = Array.from(e.target.files).slice(0, 5);
+    imageInput.addEventListener('change', async (e) => {
+      const files = Array.from(e.target.files || []).slice(0, 5);
       if (!files.length) return;
-      loadedImages = [];
+
+      statusBar.textContent = `Memuat ${files.length} foto produk...`;
       thumbList.innerHTML = '';
-      let count = 0;
-      files.forEach((file) => {
+
+      const loadSingleImage = (file) => new Promise((resolve) => {
         const reader = new FileReader();
         reader.onload = (ev) => {
+          const dataUrl = ev.target.result;
           const img = new Image();
-          img.onload = () => {
-            loadedImages.push(img);
-            count++;
-            if (count === files.length) {
-              statusBar.textContent = `${loadedImages.length} foto produk dimuat.`;
-              drawFrame(0, 0.3, 0.1);
-            }
-          };
-          img.src = ev.target.result;
-          const thumb = document.createElement('img');
-          thumb.src = ev.target.result;
-          thumbList.appendChild(thumb);
+          img.onload = () => resolve({ img, dataUrl });
+          img.onerror = () => resolve(null);
+          img.src = dataUrl;
         };
+        reader.onerror = () => resolve(null);
         reader.readAsDataURL(file);
       });
+
+      const results = await Promise.all(files.map(loadSingleImage));
+      const valid = results.filter(Boolean);
+      loadedImages = valid.map(v => v.img);
+      valid.forEach(v => {
+        const thumb = document.createElement('img');
+        thumb.src = v.dataUrl;
+        thumbList.appendChild(thumb);
+      });
+
+      drawFrame(0, 0.3, 0.1);
+      statusBar.textContent = `${loadedImages.length} foto produk siap digunakan untuk generate video.`;
     });
 
     document.getElementById('resSelect').addEventListener('change', (e) => {
@@ -854,12 +782,6 @@
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, W, H);
 
-      ctx.fillStyle = 'rgba(255,255,255,0.06)';
-      ctx.beginPath();
-      ctx.arc(W * 0.15, H * 0.2, 180 * scaleFactor, 0, Math.PI * 2);
-      ctx.arc(W * 0.85, H * 0.78, 220 * scaleFactor, 0, Math.PI * 2);
-      ctx.fill();
-
       const hookBoxY = 115 * scaleFactor;
       const hookBoxH = 118 * scaleFactor;
       const hookBoxW = W - 80 * scaleFactor;
@@ -878,13 +800,9 @@
       const cardW = W - 110 * scaleFactor;
       const cardH = 560 * scaleFactor;
 
-      ctx.save();
-      ctx.shadowColor = 'rgba(0,0,0,0.28)';
-      ctx.shadowBlur = 24 * scaleFactor;
       ctx.fillStyle = theme.card;
       roundRect(ctx, cardX, cardY, cardW, cardH, 28 * scaleFactor);
       ctx.fill();
-      ctx.restore();
 
       const imgs = loadedImages.length ? loadedImages : [placeholderImg];
       const img = imgs[slideIdx % imgs.length];
@@ -892,10 +810,12 @@
       roundRect(ctx, cardX + 14 * scaleFactor, cardY + 14 * scaleFactor, cardW - 28 * scaleFactor, cardH - 28 * scaleFactor, 20 * scaleFactor);
       ctx.clip();
 
-      const zoom = 1 + progress * 0.14;
+      const zoom = 1 + progress * 0.12;
       const boxW = cardW - 28 * scaleFactor;
       const boxH = cardH - 28 * scaleFactor;
-      const imgRatio = img.width / img.height;
+      const imgW = img.naturalWidth || img.width || 720;
+      const imgH = img.naturalHeight || img.height || 720;
+      const imgRatio = imgW / imgH;
       const boxRatio = boxW / boxH;
       let drawW, drawH;
       if (imgRatio > boxRatio) {
@@ -959,121 +879,202 @@
         ctx.lineWidth = 2 * scaleFactor;
         ctx.setLineDash([10 * scaleFactor, 8 * scaleFactor]);
         ctx.strokeRect(24 * scaleFactor, 95 * scaleFactor, W - 125 * scaleFactor, H - 285 * scaleFactor);
-        ctx.fillStyle = 'rgba(56, 189, 248, 0.9)';
-        ctx.font = `600 ${Math.round(18 * scaleFactor)}px sans-serif`;
-        ctx.textAlign = 'left';
-        ctx.fillText('Area Aman Konten (Safe-Zone)', 32 * scaleFactor, 88 * scaleFactor);
         ctx.restore();
       }
     }
 
+    function pickSupportedMimeType() {
+      if (typeof MediaRecorder === 'undefined') return '';
+      const candidates = [
+        'video/webm;codecs=vp8',
+        'video/webm;codecs=vp9',
+        'video/webm',
+        'video/mp4'
+      ];
+      for (const m of candidates) {
+        if (typeof MediaRecorder.isTypeSupported === 'function' && MediaRecorder.isTypeSupported(m)) {
+          return m;
+        }
+      }
+      return '';
+    }
+
     function runAnimation(recordMode = false) {
-      if (animFrameId) cancelAnimationFrame(animFrameId);
-      if (previewSynthStop) previewSynthStop();
+      if (animTimerId) {
+        clearInterval(animTimerId);
+        animTimerId = null;
+      }
+      if (previewSynthStop) {
+        previewSynthStop();
+        previewSynthStop = null;
+      }
 
       const imgs = loadedImages.length ? loadedImages : [placeholderImg];
-      const slideSec = parseFloat(document.getElementById('slideDuration').value);
+      const slideSec = parseFloat(document.getElementById('slideDuration').value) || 2.5;
       const totalSec = imgs.length * slideSec;
       const startTime = performance.now();
+
+      if (recordMode && typeof MediaRecorder === 'undefined') {
+        statusBar.textContent = 'Browser ini tidak mendukung MediaRecorder. Gunakan Chrome/Edge/Safari terbaru.';
+        return;
+      }
 
       let mediaRecorder = null;
       let chunks = [];
       let audioCtx = null;
       let audioElement = null;
       let stopBuiltInSynth = null;
+      let finalized = false;
 
+      downloadLinkBox.classList.remove('show');
+      updateProgressUI(0, recordMode ? 'Menyiapkan Generate...' : 'Memutar Preview...');
       speakNarration();
+
+      const finishProcess = (blobData, extName) => {
+        if (finalized) return;
+        finalized = true;
+        if (animTimerId) { clearInterval(animTimerId); animTimerId = null; }
+        isRecording = false;
+        previewBtn.disabled = false;
+        exportBtn.disabled = false;
+        if ('speechSynthesis' in window) { try { speechSynthesis.cancel(); } catch (e) {} }
+        if (stopBuiltInSynth) { try { stopBuiltInSynth(); } catch (e) {} }
+        if (audioElement) { try { audioElement.pause(); } catch (e) {} }
+        if (audioCtx && audioCtx.state !== 'closed') { try { audioCtx.close(); } catch (e) {} }
+
+        if (recordMode && blobData && blobData.size > 0) {
+          if (currentObjectUrl) URL.revokeObjectURL(currentObjectUrl);
+          currentObjectUrl = URL.createObjectURL(blobData);
+          const safeName = (document.getElementById('productName').value || 'shopee-video')
+            .toLowerCase().replace(/[^a-z0-9]+/g, '-');
+          const fileName = `${safeName}-9x16.${extName || 'webm'}`;
+
+          manualDownloadAnchor.href = currentObjectUrl;
+          manualDownloadAnchor.download = fileName;
+          manualDownloadAnchor.textContent = `💾 Simpan ${fileName} ke Storage HP`;
+          downloadLinkBox.classList.add('show');
+
+          try {
+            const a = document.createElement('a');
+            a.href = currentObjectUrl;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+          } catch (e) {}
+
+          updateProgressUI(100, 'Selesai 100%');
+          statusBar.textContent = `Selesai! File ${fileName} tersimpan ke storage perangkat (folder Download).`;
+        } else if (recordMode) {
+          updateProgressUI(0, 'Gagal merekam');
+          statusBar.textContent = 'Rekaman video kosong. Coba durasi lebih singkat atau pilih resolusi HD 720×1280.';
+        } else {
+          updateProgressUI(100, 'Preview Selesai');
+          statusBar.textContent = 'Pratinjau selesai. Klik Generate & Download Video untuk membuat file.';
+        }
+        drawFrame(0, 0.3, 0.1);
+      };
 
       if (recordMode) {
         isRecording = true;
         previewBtn.disabled = true;
         exportBtn.disabled = true;
-        statusBar.textContent = `Merekam video (${totalSec.toFixed(1)} detik)... Mohon tunggu hingga selesai.`;
+        statusBar.textContent = `Generating ${imgs.length} foto (${totalSec.toFixed(1)} detik)...`;
 
-        const canvasStream = canvas.captureStream(30);
-        const tracks = [...canvasStream.getVideoTracks()];
+        try {
+          const canvasStream = canvas.captureStream(25);
+          const tracks = [...canvasStream.getVideoTracks()];
 
-        const hasCustomAudio = audioInput.files && audioInput.files[0];
-        const musicPreset = document.getElementById('musicPreset').value;
+          const hasCustomAudio = audioInput.files && audioInput.files[0];
+          const musicPreset = document.getElementById('musicPreset').value;
 
-        if (hasCustomAudio || musicPreset !== 'none') {
-          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-          const dest = audioCtx.createMediaStreamDestination();
-
-          if (hasCustomAudio) {
-            audioElement = new Audio(URL.createObjectURL(audioInput.files[0]));
-            audioElement.crossOrigin = 'anonymous';
-            const source = audioCtx.createMediaElementSource(audioElement);
-            source.connect(dest);
-            source.connect(audioCtx.destination);
-            audioElement.play().catch(() => {});
-          } else {
-            stopBuiltInSynth = startBuiltInMusic(audioCtx, dest, musicPreset);
+          if (hasCustomAudio || musicPreset !== 'none') {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const dest = audioCtx.createMediaStreamDestination();
+            if (hasCustomAudio) {
+              audioElement = new Audio(URL.createObjectURL(audioInput.files[0]));
+              const source = audioCtx.createMediaElementSource(audioElement);
+              source.connect(dest);
+              source.connect(audioCtx.destination);
+              audioElement.play().catch(() => {});
+            } else {
+              stopBuiltInSynth = startBuiltInMusic(audioCtx, dest, musicPreset);
+            }
+            tracks.push(...dest.stream.getAudioTracks());
           }
-          tracks.push(...dest.stream.getAudioTracks());
+
+          const combinedStream = new MediaStream(tracks);
+          const mimeType = pickSupportedMimeType();
+          mediaRecorder = mimeType
+            ? new MediaRecorder(combinedStream, { mimeType, videoBitsPerSecond: 2500000 })
+            : new MediaRecorder(combinedStream);
+
+          const usedType = mediaRecorder.mimeType || mimeType || 'video/webm';
+          const ext = usedType.includes('mp4') ? 'mp4' : 'webm';
+
+          mediaRecorder.ondataavailable = (e) => {
+            if (e.data && e.data.size > 0) chunks.push(e.data);
+          };
+
+          mediaRecorder.onstop = () => {
+            const finalBlob = new Blob(chunks, { type: usedType });
+            finishProcess(finalBlob, ext);
+          };
+
+          mediaRecorder.onerror = () => {
+            finishProcess(null, ext);
+          };
+
+          mediaRecorder.start(250);
+        } catch (err) {
+          finishProcess(null, 'webm');
+          return;
         }
-
-        const combinedStream = new MediaStream(tracks);
-        const mimeType = MediaRecorder.isTypeSupported('video/mp4;codecs=avc1')
-          ? 'video/mp4;codecs=avc1'
-          : (MediaRecorder.isTypeSupported('video/webm;codecs=vp9') ? 'video/webm;codecs=vp9' : 'video/webm');
-
-        mediaRecorder = new MediaRecorder(combinedStream, { mimeType, videoBitsPerSecond: 3500000 });
-        mediaRecorder.ondataavailable = (e) => { if (e.data.size > 0) chunks.push(e.data); };
-        mediaRecorder.onstop = () => {
-          isRecording = false;
-          previewBtn.disabled = false;
-          exportBtn.disabled = false;
-          if ('speechSynthesis' in window) { try { speechSynthesis.cancel(); } catch (e) {} }
-          if (stopBuiltInSynth) stopBuiltInSynth();
-          if (audioElement) audioElement.pause();
-          if (audioCtx && audioCtx.state !== 'closed') audioCtx.close();
-
-          const ext = mimeType.includes('mp4') ? 'mp4' : 'webm';
-          const blob = new Blob(chunks, { type: mimeType });
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          const safeName = (document.getElementById('productName').value || 'shopee-video')
-            .toLowerCase().replace(/[^a-z0-9]+/g, '-');
-          a.href = url;
-          a.download = `${safeName}-9x16.${ext}`;
-          a.click();
-          statusBar.textContent = `Selesai! File ${safeName}-9x16.${ext} berhasil diunduh.`;
-          drawFrame(0, 0.3, 0.1);
-        };
-        mediaRecorder.start();
       } else {
         const musicPreset = document.getElementById('musicPreset').value;
         if (musicPreset !== 'none') {
-          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-          const dest = audioCtx.createMediaStreamDestination();
-          stopBuiltInSynth = startBuiltInMusic(audioCtx, dest, musicPreset);
+          try {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const dest = audioCtx.createMediaStreamDestination();
+            stopBuiltInSynth = startBuiltInMusic(audioCtx, dest, musicPreset);
+          } catch (e) {}
         }
-        statusBar.textContent = `Memutar pratinjau + suara (${totalSec.toFixed(1)} detik)...`;
+        statusBar.textContent = `Memutar pratinjau ${imgs.length} foto (${totalSec.toFixed(1)} detik)...`;
       }
 
-      function step(now) {
-        const elapsed = (now - startTime) / 1000;
+      animTimerId = setInterval(() => {
+        const elapsed = (performance.now() - startTime) / 1000;
         const overallProgress = Math.min(1, elapsed / totalSec);
+        const pct = Math.min(99, overallProgress * 100);
+
+        if (recordMode) {
+          updateProgressUI(pct, `Generating (${Math.min(imgs.length, Math.floor(elapsed / slideSec) + 1)}/${imgs.length} foto)`);
+        } else {
+          updateProgressUI(overallProgress * 100, 'Preview Animasi');
+        }
+
         if (elapsed >= totalSec) {
           drawFrame(imgs.length - 1, 1, 1);
           if (recordMode && mediaRecorder && mediaRecorder.state !== 'inactive') {
-            mediaRecorder.stop();
+            try { mediaRecorder.requestData(); } catch (e) {}
+            setTimeout(() => {
+              if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                mediaRecorder.stop();
+              } else {
+                const finalBlob = chunks.length ? new Blob(chunks, { type: 'video/webm' }) : null;
+                finishProcess(finalBlob, 'webm');
+              }
+            }, 350);
           } else {
-            if ('speechSynthesis' in window) { try { speechSynthesis.cancel(); } catch (e) {} }
-            if (stopBuiltInSynth) stopBuiltInSynth();
-            if (audioCtx && audioCtx.state !== 'closed') audioCtx.close();
-            statusBar.textContent = 'Pratinjau selesai. Klik Generate & Download Video untuk mengunduh.';
+            finishProcess(null, 'webm');
           }
           return;
         }
+
         const slideIdx = Math.floor(elapsed / slideSec);
         const progress = (elapsed % slideSec) / slideSec;
         drawFrame(slideIdx, progress, overallProgress);
-        animFrameId = requestAnimationFrame(step);
-      }
-
-      animFrameId = requestAnimationFrame(step);
+      }, 40);
     }
 
     previewBtn.addEventListener('click', () => runAnimation(false));
