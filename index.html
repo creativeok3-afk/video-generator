@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shopee Video Generator 9:16 — Gratis & Offline</title>
+  <style>
+    :root {
+      --primary: #ee4d2d;
+      --primary-dark: #d73211;
+      --bg: #0f172a;
+      --card: #1e293b;
+      --border: #334155;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+    body { background: var(--bg); color: var(--text); min-height: 100vh; padding: 16px; }
+    .container { max-width: 1120px; margin: 0 auto; }
+    header {
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+      gap: 12px; padding-bottom: 16px; border-bottom: 1px solid var(--border); margin-bottom: 20px;
+    }
+    header h1 { font-size: 1.35rem; display: flex; align-items: center; gap: 8px; }
+    .badge { background: var(--primary); color: #fff; font-size: 0.72rem; padding: 3px 8px; border-radius: 999px; font-weight: 700; }
+    .grid { display: grid; grid-template-columns: 1fr 380px; gap: 20px; align-items: start; }
+    @media (max-width: 860px) { .grid { grid-template-columns: 1fr; } }
+    .panel { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px; }
+    .panel h2 { font-size: 1rem; margin-bottom: 14px; color: #e2e8f0; border-left: 3px solid var(--primary); padding-left: 10px; }
+    .form-group { margin-bottom: 14px; }
+    label { display: block; font-size: 0.84rem; color: var(--muted); margin-bottom: 6px; font-weight: 600; }
+    input[type="text"], select, textarea {
+      width: 100%; background: #0f172a; border: 1px solid var(--border); color: var(--text);
+      padding: 10px 12px; border-radius: 8px; font-size: 0.92rem; outline: none;
+    }
+    input[type="text"]:focus, select:focus, textarea:focus { border-color: var(--primary); }
+    input[type="file"] {
+      width: 100%; background: #0f172a; border: 1px dashed var(--border); color: var(--muted);
+      padding: 10px; border-radius: 8px; font-size: 0.85rem; cursor: pointer;
+    }
+    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .thumbs { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+    .thumbs img { width: 54px; height: 54px; object-fit: cover; border-radius: 8px; border: 2px solid var(--border); }
+    .checkbox-row { display: flex; align-items: center; gap: 8px; font-size: 0.86rem; color: #cbd5e1; cursor: pointer; }
+    .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
+    button {
+      border: none; border-radius: 10px; padding: 12px 14px; font-weight: 700; font-size: 0.9rem;
+      cursor: pointer; transition: 0.15s ease; display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .btn-secondary { background: #334155; color: #fff; }
+    .btn-secondary:hover { background: #475569; }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-dark); }
+    button:disabled { opacity: 0.55; cursor: not-allowed; }
+    .preview-wrap { display: flex; flex-direction: column; align-items: center; }
+    canvas {
+      width: 100%; max-width: 315px; aspect-ratio: 9 / 16; background: #000;
+      border-radius: 16px; border: 2px solid var(--border); box-shadow: 0 12px 30px rgba(0,0,0,0.45);
+    }
+    .status-bar {
+      margin-top: 12px; width: 100%; text-align: center; font-size: 0.84rem;
+      padding: 8px 10px; border-radius: 8px; background: #0f172a; color: #cbd5e1; border: 1px solid var(--border);
+    }
+    .tips { font-size: 0.8rem; color: var(--muted); margin-top: 10px; line-height: 1.45; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🎬 Shopee Video Generator <span class="badge">9:16 • 100% Gratis</span></h1>
+      <div style="font-size:0.84rem; color:#94a3b8;">Siap Upload ke Shopee Video, Reels &amp; TikTok</div>
+    </header>
+
+    <div class="grid">
+      <div class="panel">
+        <h2>1. Pengaturan Konten &amp; Foto Produk</h2>
+
+        <div class="form-group">
+          <label>Upload Foto Produk (1 – 5 Gambar JPG/PNG)</label>
+          <input type="file" id="imageInput" accept="image/*" multiple />
+          <div class="thumbs" id="thumbList"></div>
+        </div>
+
+        <div class="form-group">
+          <label>Teks Hook Utama (Muncul di Bagian Atas)</label>
+          <input type="text" id="hookText" value="NYESEL BARU TAU ADA ALAT SEBAGUS INI! 😱" maxlength="65" />
+        </div>
+
+        <div class="row-2">
+          <div class="form-group">
+            <label>Nama Produk Singkat</label>
+            <input type="text" id="productName" value="Kipas Mini Turbo Portable" maxlength="40" />
+          </div>
+          <div class="form-group">
+            <label>Label Harga / Promo</label>
+            <input type="text" id="priceTag" value="DISKON 50% • Rp 39.000" maxlength="30" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Teks Ajakan (Call to Action)</label>
+          <input type="text" id="ctaText" value="Cek Keranjang Oranye Sebelum Kehabisan 👇" maxlength="50" />
+        </div>
+
+        <div class="row-2">
+          <div class="form-group">
+            <label>Tema Warna Template</label>
+            <select id="themeSelect">
+              <option value="shopee">Shopee Oranye Energi</option>
+              <option value="flash">Flash Sale Merah Kuning</option>
+              <option value="clean">Minimalis Putih Bersih</option>
+              <option value="dark">Elegan Gelap Emas</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Durasi per Foto</label>
+            <select id="slideDuration">
+              <option value="2.5">2.5 Detik / Foto</option>
+              <option value="3" selected>3 Detik / Foto (Rekomendasi)</option>
+              <option value="4">4 Detik / Foto</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row-2">
+          <div class="form-group">
+            <label>Resolusi Video</label>
+            <select id="resSelect">
+              <option value="720x1280" selected>HD 720×1280 (Ringan &amp; Cepat)</option>
+              <option value="1080x1920">Full HD 1080×1920</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Audio Latar (Opsional MP3/WAV)</label>
+            <input type="file" id="audioInput" accept="audio/*" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="checkbox-row">
+            <input type="checkbox" id="safeZoneToggle" checked />
+            Tampilkan garis bantu Safe-Zone (hindari tertutup ikon kanan &amp; keranjang bawah)
+          </label>
+        </div>
+
+        <div class="btn-group">
+          <button type="button" class="btn-secondary" id="previewBtn">▶ Preview Animasi</button>
+          <button type="button" class="btn-primary" id="exportBtn">⬇ Generate &amp; Download Video</button>
+        </div>
+        <p class="tips">
+          💡 <strong>Tips:</strong> Jika belum mengunggah foto, sistem otomatis menampilkan contoh pratinjau. Hasil video berformat <code>.webm</code> / <code>.mp4</code> yang langsung kompatibel diunggah ke aplikasi Shopee Video, Instagram Reels, dan TikTok.
+        </p>
+      </div>
+
+      <div class="panel preview-wrap">
+        <h2 style="width:100%;">2. Pratinjau Layar 9:16</h2>
+        <canvas id="videoCanvas" width="720" height="1280"></canvas>
+        <div class="status-bar" id="statusBar">Siap digunakan. Unggah foto produk lalu klik Preview atau Generate.</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('videoCanvas');
+    const ctx = canvas.getContext('2d');
+    const imageInput = document.getElementById('imageInput');
+    const audioInput = document.getElementById('audioInput');
+    const thumbList = document.getElementById('thumbList');
+    const statusBar = document.getElementById('statusBar');
+    const previewBtn = document.getElementById('previewBtn');
+    const exportBtn = document.getElementById('exportBtn');
+
+    let loadedImages = [];
+    let animFrameId = null;
+    let isRecording = false;
+
+    const themes = {
+      shopee: { bgTop: '#ee4d2d', bgBot: '#ff7337', card: '#ffffff', text: '#1e293b', badgeBg: '#facc15', badgeText: '#111827', hookBg: '#111827', hookText: '#ffffff' },
+      flash:  { bgTop: '#991b1b', bgBot: '#dc2626', card: '#fef2f2', text: '#7f1d1d', badgeBg: '#fde047', badgeText: '#991b1b', hookBg: '#facc15', hookText: '#7f1d1d' },
+      clean:  { bgTop: '#f1f5f9', bgBot: '#cbd5e1', card: '#ffffff', text: '#0f172a', badgeBg: '#ee4d2d', badgeText: '#ffffff', hookBg: '#0f172a', hookText: '#ffffff' },
+      dark:   { bgTop: '#090d16', bgBot: '#1e293b', card: '#111827', text: '#f8fafc', badgeBg: '#f59e0b', badgeText: '#111827', hookBg: '#f59e0b', hookText: '#090d16' }
+    };
+
+    function createPlaceholderImage() {
+      const off = document.createElement('canvas');
+      off.width = 720; off.height = 720;
+      const octx = off.getContext('2d');
+      const grad = octx.createLinearGradient(0, 0, 720, 720);
+      grad.addColorStop(0, '#fed7aa');
+      grad.addColorStop(1, '#fdba74');
+      octx.fillStyle = grad;
+      octx.fillRect(0, 0, 720, 720);
+      octx.fillStyle = '#9a3412';
+      octx.font = 'bold 42px sans-serif';
+      octx.textAlign = 'center';
+      octx.fillText('CONTOH FOTO PRODUK', 360, 340);
+      octx.font = '26px sans-serif';
+      octx.fillText('Unggah 1–5 foto produk Anda', 360, 390);
+      const img = new Image();
+      img.src = off.toDataURL();
+      return img;
+    }
+
+    const placeholderImg = createPlaceholderImage();
+    placeholderImg.onload = () => drawFrame(0, 0.35);
+
+    imageInput.addEventListener('change', (e) => {
+      const files = Array.from(e.target.files).slice(0, 5);
+      if (!files.length) return;
+      loadedImages = [];
+      thumbList.innerHTML = '';
+      let count = 0;
+      files.forEach((file) => {
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          const img = new Image();
+          img.onload = () => {
+            loadedImages.push(img);
+            count++;
+            if (count === files.length) {
+              statusBar.textContent = `${loadedImages.length} foto produk dimuat.`;
+              drawFrame(0, 0.3);
+            }
+          };
+          img.src = ev.target.result;
+          const thumb = document.createElement('img');
+          thumb.src = ev.target.result;
+          thumbList.appendChild(thumb);
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+
+    document.getElementById('resSelect').addEventListener('change', (e) => {
+      const [w, h] = e.target.value.split('x').map(Number);
+      canvas.width = w;
+      canvas.height = h;
+      drawFrame(0, 0.3);
+    });
+
+    ['hookText', 'productName', 'priceTag', 'ctaText', 'themeSelect', 'safeZoneToggle'].forEach(id => {
+      document.getElementById(id).addEventListener('input', () => {
+        if (!isRecording) drawFrame(0, 0.3);
+      });
+    });
+
+    function wrapText(context, text, x, y, maxWidth, lineHeight) {
+      const words = text.split(' ');
+      let line = '';
+      const lines = [];
+      for (let n = 0; n < words.length; n++) {
+        const testLine = line + words[n] + ' ';
+        const metrics = context.measureText(testLine);
+        if (metrics.width > maxWidth && n > 0) {
+          lines.push(line.trim());
+          line = words[n] + ' ';
+        } else {
+          line = testLine;
+        }
+      }
+      lines.push(line.trim());
+      const startY = y - ((lines.length - 1) * lineHeight) / 2;
+      lines.forEach((l, idx) => {
+        context.fillText(l, x, startY + idx * lineHeight);
+      });
+    }
+
+    function roundRect(ctx, x, y, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.arcTo(x + w, y, x + w, y + h, r);
+      ctx.arcTo(x + w, y + h, x, y + h, r);
+      ctx.arcTo(x, y + h, x, y, r);
+      ctx.arcTo(x, y, x + w, y, r);
+      ctx.closePath();
+    }
+
+    function drawFrame(slideIdx, progress) {
+      const W = canvas.width;
+      const H = canvas.height;
+      const scaleFactor = W / 720;
+      const theme = themes[document.getElementById('themeSelect').value];
+      const hookText = document.getElementById('hookText').value || 'REKOMENDASI PRODUK VIRAL';
+      const productName = document.getElementById('productName').value || 'Produk Pilihan';
+      const priceTag = document.getElementById('priceTag').value || 'PROMO HARI INI';
+      const ctaText = document.getElementById('ctaText').value || 'Cek Keranjang Oranye 👇';
+      const showSafeZone = document.getElementById('safeZoneToggle').checked && !isRecording;
+
+      // Background Gradient
+      const grad = ctx.createLinearGradient(0, 0, 0, H);
+      grad.addColorStop(0, theme.bgTop);
+      grad.addColorStop(1, theme.bgBot);
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, W, H);
+
+      // Decorative subtle circles
+      ctx.fillStyle = 'rgba(255,255,255,0.06)';
+      ctx.beginPath();
+      ctx.arc(W * 0.15, H * 0.2, 180 * scaleFactor, 0, Math.PI * 2);
+      ctx.arc(W * 0.85, H * 0.78, 220 * scaleFactor, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Top Hook Banner (Safe from top status bar)
+      const hookBoxY = 125 * scaleFactor;
+      const hookBoxH = 125 * scaleFactor;
+      const hookBoxW = W - 80 * scaleFactor;
+      ctx.fillStyle = theme.hookBg;
+      roundRect(ctx, 40 * scaleFactor, hookBoxY, hookBoxW, hookBoxH, 22 * scaleFactor);
+      ctx.fill();
+
+      ctx.fillStyle = theme.hookText;
+      ctx.font = `800 ${Math.round(32 * scaleFactor)}px sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      wrapText(ctx, hookText, W / 2, hookBoxY + hookBoxH / 2, hookBoxW - 40 * scaleFactor, 40 * scaleFactor);
+
+      // Product Card Frame
+      const cardX = 55 * scaleFactor;
+      const cardY = 275 * scaleFactor;
+      const cardW = W - 110 * scaleFactor;
+      const cardH = 610 * scaleFactor;
+
+      ctx.save();
+      ctx.shadowColor = 'rgba(0,0,0,0.28)';
+      ctx.shadowBlur = 24 * scaleFactor;
+      ctx.fillStyle = theme.card;
+      roundRect(ctx, cardX, cardY, cardW, cardH, 28 * scaleFactor);
+      ctx.fill();
+      ctx.restore();
+
+      // Clip & Draw Zooming Product Image
+      const imgs = loadedImages.length ? loadedImages : [placeholderImg];
+      const img = imgs[slideIdx % imgs.length];
+      ctx.save();
+      roundRect(ctx, cardX + 14 * scaleFactor, cardY + 14 * scaleFactor, cardW - 28 * scaleFactor, cardH - 28 * scaleFactor, 20 * scaleFactor);
+      ctx.clip();
+
+      const zoom = 1 + progress * 0.14;
+      const boxW = cardW - 28 * scaleFactor;
+      const boxH = cardH - 28 * scaleFactor;
+      const imgRatio = img.width / img.height;
+      const boxRatio = boxW / boxH;
+      let drawW, drawH;
+      if (imgRatio > boxRatio) {
+        drawH = boxH * zoom;
+        drawW = drawH * imgRatio;
+      } else {
+        drawW = boxW * zoom;
+        drawH = drawW / imgRatio;
+      }
+      const drawX = cardX + 14 * scaleFactor + (boxW - drawW) / 2;
+      const drawY = cardY + 14 * scaleFactor + (boxH - drawH) / 2;
+      ctx.drawImage(img, drawX, drawY, drawW, drawH);
+      ctx.restore();
+
+      // Slide Counter Dots
+      if (imgs.length > 1) {
+        const dotY = cardY + cardH - 32 * scaleFactor;
+        const totalDotW = imgs.length * 18 * scaleFactor;
+        imgs.forEach((_, idx) => {
+          ctx.fillStyle = idx === (slideIdx % imgs.length) ? '#ee4d2d' : 'rgba(255,255,255,0.75)';
+          ctx.beginPath();
+          ctx.arc(W / 2 - totalDotW / 2 + idx * 18 * scaleFactor + 9 * scaleFactor, dotY, 6 * scaleFactor, 0, Math.PI * 2);
+          ctx.fill();
+        });
+      }
+
+      // Promo Price Badge overlapping bottom of card
+      const badgeW = 460 * scaleFactor;
+      const badgeH = 66 * scaleFactor;
+      const badgeX = (W - badgeW) / 2;
+      const badgeY = cardY + cardH - 28 * scaleFactor;
+      ctx.fillStyle = theme.badgeBg;
+      roundRect(ctx, badgeX, badgeY, badgeW, badgeH, 999);
+      ctx.fill();
+
+      ctx.fillStyle = theme.badgeText;
+      ctx.font = `900 ${Math.round(30 * scaleFactor)}px sans-serif`;
+      ctx.fillText(priceTag, W / 2, badgeY + badgeH / 2 + 2 * scaleFactor);
+
+      // Product Title & CTA (Kept above bottom Shopee UI safe-zone)
+      ctx.fillStyle = '#ffffff';
+      ctx.font = `800 ${Math.round(34 * scaleFactor)}px sans-serif`;
+      ctx.fillText(productName, W / 2, 965 * scaleFactor);
+
+      // Animated Bounce CTA Pill
+      const bounce = Math.sin(progress * Math.PI * 4) * 5 * scaleFactor;
+      const ctaW = W - 120 * scaleFactor;
+      const ctaH = 64 * scaleFactor;
+      ctx.fillStyle = 'rgba(0,0,0,0.68)';
+      roundRect(ctx, 60 * scaleFactor, 1005 * scaleFactor + bounce, ctaW, ctaH, 16 * scaleFactor);
+      ctx.fill();
+
+      ctx.fillStyle = '#fde047';
+      ctx.font = `700 ${Math.round(25 * scaleFactor)}px sans-serif`;
+      ctx.fillText(ctaText, W / 2, 1005 * scaleFactor + ctaH / 2 + bounce);
+
+      // Safe-Zone Overlay Guide (Preview Only)
+      if (showSafeZone) {
+        ctx.save();
+        ctx.strokeStyle = 'rgba(56, 189, 248, 0.85)';
+        ctx.lineWidth = 2 * scaleFactor;
+        ctx.setLineDash([10 * scaleFactor, 8 * scaleFactor]);
+        // Right icons zone & bottom caption/cart zone
+        ctx.strokeRect(24 * scaleFactor, 100 * scaleFactor, W - 125 * scaleFactor, H - 290 * scaleFactor);
+        ctx.fillStyle = 'rgba(56, 189, 248, 0.9)';
+        ctx.font = `600 ${Math.round(18 * scaleFactor)}px sans-serif`;
+        ctx.textAlign = 'left';
+        ctx.fillText('Area Aman Konten (Safe-Zone)', 32 * scaleFactor, 92 * scaleFactor);
+        ctx.restore();
+      }
+    }
+
+    function runAnimation(recordMode = false) {
+      if (animFrameId) cancelAnimationFrame(animFrameId);
+      const imgs = loadedImages.length ? loadedImages : [placeholderImg];
+      const slideSec = parseFloat(document.getElementById('slideDuration').value);
+      const totalSec = imgs.length * slideSec;
+      const startTime = performance.now();
+
+      let mediaRecorder = null;
+      let chunks = [];
+      let audioCtx = null;
+      let audioElement = null;
+
+      if (recordMode) {
+        isRecording = true;
+        previewBtn.disabled = true;
+        exportBtn.disabled = true;
+        statusBar.textContent = `Merekam video (${totalSec.toFixed(1)} detik)... Mohon tunggu hingga selesai.`;
+
+        const canvasStream = canvas.captureStream(30);
+        const tracks = [...canvasStream.getVideoTracks()];
+
+        // Optional Audio Track Mixing
+        if (audioInput.files && audioInput.files[0]) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          const dest = audioCtx.createMediaStreamDestination();
+          audioElement = new Audio(URL.createObjectURL(audioInput.files[0]));
+          audioElement.crossOrigin = 'anonymous';
+          const source = audioCtx.createMediaElementSource(audioElement);
+          source.connect(dest);
+          source.connect(audioCtx.destination);
+          tracks.push(...dest.stream.getAudioTracks());
+          audioElement.play().catch(() => {});
+        }
+
+        const combinedStream = new MediaStream(tracks);
+        const mimeType = MediaRecorder.isTypeSupported('video/mp4;codecs=avc1')
+          ? 'video/mp4;codecs=avc1'
+          : (MediaRecorder.isTypeSupported('video/webm;codecs=vp9') ? 'video/webm;codecs=vp9' : 'video/webm');
+
+        mediaRecorder = new MediaRecorder(combinedStream, { mimeType, videoBitsPerSecond: 3500000 });
+        mediaRecorder.ondataavailable = (e) => { if (e.data.size > 0) chunks.push(e.data); };
+        mediaRecorder.onstop = () => {
+          isRecording = false;
+          previewBtn.disabled = false;
+          exportBtn.disabled = false;
+          if (audioElement) audioElement.pause();
+          if (audioCtx) audioCtx.close();
+
+          const ext = mimeType.includes('mp4') ? 'mp4' : 'webm';
+          const blob = new Blob(chunks, { type: mimeType });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          const safeName = (document.getElementById('productName').value || 'shopee-video')
+            .toLowerCase().replace(/[^a-z0-9]+/g, '-');
+          a.href = url;
+          a.download = `${safeName}-9x16.${ext}`;
+          a.click();
+          statusBar.textContent = `Selesai! File ${safeName}-9x16.${ext} berhasil diunduh.`;
+          drawFrame(0, 0.3);
+        };
+        mediaRecorder.start();
+      } else {
+        statusBar.textContent = `Memutar pratinjau (${totalSec.toFixed(1)} detik)...`;
+      }
+
+      function step(now) {
+        const elapsed = (now - startTime) / 1000;
+        if (elapsed >= totalSec) {
+          drawFrame(imgs.length - 1, 1);
+          if (recordMode && mediaRecorder && mediaRecorder.state !== 'inactive') {
+            mediaRecorder.stop();
+          } else {
+            statusBar.textContent = 'Pratinjau selesai. Klik Generate & Download Video untuk mengunduh.';
+          }
+          return;
+        }
+        const slideIdx = Math.floor(elapsed / slideSec);
+        const progress = (elapsed % slideSec) / slideSec;
+        drawFrame(slideIdx, progress);
+        animFrameId = requestAnimationFrame(step);
+      }
+
+      animFrameId = requestAnimationFrame(step);
+    }
+
+    previewBtn.addEventListener('click', () => runAnimation(false));
+    exportBtn.addEventListener('click', () => runAnimation(true));
+  </script>
+</body>
+</html>
