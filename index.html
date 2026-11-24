@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Shopee Video Generator 9:16 v3.0 — Impor Google Sheets, Voice Over & Musik</title>
+  <title>Shopee Video Generator 9:16 v3.1 — Perbaikan Impor CSV & Suara TTS</title>
   <style>
     :root {
       --primary: #ee4d2d;
@@ -13,7 +13,6 @@
       --border: #334155;
       --text: #f8fafc;
       --muted: #94a3b8;
-      --accent-green: #10b981;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
     body { background: var(--bg); color: var(--text); min-height: 100vh; padding: 16px; }
@@ -34,7 +33,7 @@
       width: 100%; background: #0f172a; border: 1px solid var(--border); color: var(--text);
       padding: 10px 12px; border-radius: 8px; font-size: 0.92rem; outline: none;
     }
-    textarea { resize: vertical; min-height: 68px; line-height: 1.4; }
+    textarea { resize: vertical; min-height: 74px; line-height: 1.45; }
     input[type="text"]:focus, select:focus, textarea:focus { border-color: var(--primary); }
     input[type="file"] {
       width: 100%; background: #0f172a; border: 1px dashed var(--border); color: var(--muted);
@@ -59,14 +58,14 @@
     }
     .sheets-box .sub-box-title { color: #34d399; }
     .btn-mini {
-      background: #334155; color: #fff; border: none; border-radius: 6px; padding: 5px 10px;
+      background: #334155; color: #fff; border: none; border-radius: 6px; padding: 6px 10px;
       font-size: 0.78rem; font-weight: 600; cursor: pointer;
     }
     .btn-mini:hover { background: #475569; }
     .btn-mini.green { background: #059669; }
     .btn-mini.green:hover { background: #047857; }
     .import-drawer {
-      display: none; margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border);
+      display: none; margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--border);
     }
     .import-drawer.open { display: block; }
     .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
@@ -90,15 +89,15 @@
     }
     .tips { font-size: 0.8rem; color: var(--muted); margin-top: 10px; line-height: 1.45; }
     .pill-info {
-      display: inline-block; font-size: 0.74rem; background: rgba(16,185,129,0.16); color: #6ee7b7;
-      padding: 2px 8px; border-radius: 6px; margin-top: 6px;
+      display: inline-block; font-size: 0.75rem; background: rgba(16,185,129,0.16); color: #6ee7b7;
+      padding: 3px 8px; border-radius: 6px; margin-top: 8px;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <header>
-      <h1>🎬 Shopee Video Generator <span class="badge">v3.0 • Impor Google Sheets + VO</span></h1>
+      <h1>🎬 Shopee Video Generator <span class="badge">v3.1 • Fix CSV &amp; Suara TTS</span></h1>
       <div style="font-size:0.84rem; color:#94a3b8;">100% Gratis • Sinkron Google Sheets • Siap Upload</div>
     </header>
 
@@ -106,11 +105,12 @@
       <div class="panel">
         <h2>1. Data Produk &amp; Pengaturan Konten</h2>
 
-        <!-- FITUR BARU V3: IMPOR CSV / PASTE DARI GOOGLE SHEETS -->
+        <!-- IMPOR CSV / PASTE DARI GOOGLE SHEETS -->
         <div class="sub-box sheets-box">
           <div class="sub-box-title">
             <span>📊 Impor Data dari Google Sheets</span>
-            <div style="display:flex; gap:6px;">
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <button type="button" class="btn-mini" id="loadSampleDirectBtn">⚡ Isi Contoh</button>
               <button type="button" class="btn-mini green" id="toggleImportBtn">📥 Impor CSV / Paste Sheets</button>
             </div>
           </div>
@@ -119,7 +119,7 @@
             <div>
               <label>Pilih Produk dari Daftar Sheets</label>
               <select id="sheetProductSelect" disabled>
-                <option value="">-- Belum ada data diimpor (Klik tombol di atas) --</option>
+                <option value="">-- Belum ada data (Klik Impor CSV / Paste atau Isi Contoh) --</option>
               </select>
             </div>
             <div style="display:flex; gap:6px;">
@@ -129,14 +129,14 @@
           </div>
           <div id="sheetImportStatus" class="pill-info" style="display:none;"></div>
 
-          <div class="import-drawer" id="importDrawer">
+          <div class="import-drawer open" id="importDrawer">
             <div class="row-2" style="margin-bottom:10px;">
               <div>
-                <label>Opsi A: Upload File CSV dari Google Sheets</label>
-                <input type="file" id="csvFileInput" accept=".csv,.tsv,.txt" />
+                <label>Opsi A: Pilih File CSV / TSV / TXT</label>
+                <input type="file" id="csvFileInput" accept=".csv,.tsv,.txt,text/csv,text/plain" />
               </div>
               <div>
-                <label>Atau Tempel Link CSV Publik Google Sheets</label>
+                <label>Atau Tempel Link CSV Publik Sheets</label>
                 <div style="display:flex; gap:6px;">
                   <input type="text" id="sheetCsvUrl" placeholder="https://docs.google.com/spreadsheets/d/.../pub?output=csv" />
                   <button type="button" class="btn-mini green" id="fetchUrlBtn">Ambil</button>
@@ -145,10 +145,10 @@
             </div>
 
             <div class="form-group" style="margin-bottom:8px;">
-              <label>Opsi B: Copy-Paste Langsung Baris dari Google Sheets (Ctrl+C → Ctrl+V)</label>
-              <textarea id="pasteSheetsArea" placeholder="Blok baris data di Google Sheets Anda (kolom: Nama Produk | Caption/Hook | Link | Hashtag | URL Gambar | Status | Naskah VO), lalu tempel di sini..."></textarea>
+              <label>Opsi B: Copy-Paste Baris dari Google Sheets / CSV / Teks Produk</label>
+              <textarea id="pasteSheetsArea" placeholder="Tempel baris dari Google Sheets (Ctrl+V) atau format CSV/teks per baris..."></textarea>
             </div>
-            <div style="display:flex; gap:8px; justify-content:flex-end;">
+            <div style="display:flex; gap:8px; justify-content:flex-end; flex-wrap:wrap;">
               <button type="button" class="btn-mini" id="loadSampleBtn">Isi Contoh 3 Produk</button>
               <button type="button" class="btn-mini green" id="parsePasteBtn">✔ Muat ke Dropdown Produk</button>
             </div>
@@ -186,7 +186,10 @@
         <div class="sub-box">
           <div class="sub-box-title">
             <span>🎙️ Voice Over Otomatis (Text-to-Speech)</span>
-            <button type="button" class="btn-mini" id="testVoiceBtn">🔊 Tes Suara</button>
+            <div style="display:flex; gap:6px;">
+              <button type="button" class="btn-mini" id="refreshVoicesBtn">🔄 Muat Suara</button>
+              <button type="button" class="btn-mini" id="testVoiceBtn">🔊 Tes Suara</button>
+            </div>
           </div>
           <div class="form-group" style="margin-bottom:10px;">
             <label class="checkbox-row">
@@ -201,7 +204,9 @@
           <div class="row-2">
             <div>
               <label>Pilih Suara Perangkat</label>
-              <select id="voiceSelect"></select>
+              <select id="voiceSelect">
+                <option value="__auto_id__">Suara Bawaan Browser (id-ID)</option>
+              </select>
             </div>
             <div>
               <label>Kecepatan Bicara</label>
@@ -276,14 +281,14 @@
           <button type="button" class="main-btn btn-primary" id="exportBtn">⬇ Generate &amp; Download Video</button>
         </div>
         <p class="tips">
-          💡 <strong>Tips Cepat:</strong> Di Google Sheets, blok beberapa baris produk sekaligus lalu tekan <strong>Ctrl+C</strong>, kemudian tempel di kotak <strong>Impor CSV / Paste Sheets</strong> di atas. Semua produk langsung masuk ke menu dropdown!
+          💡 <strong>Info Suara Perangkat:</strong> Sebagian browser/OS (terutama server atau mode tertentu) tidak menginstal paket suara TTS sistem, sehingga daftar suara bawaan bisa kosong. Aplikasi tetap menyediakan opsi <strong>Suara Bawaan Browser (id-ID)</strong> serta <strong>subtitle otomatis</strong> di layar.
         </p>
       </div>
 
       <div class="panel preview-wrap">
         <h2 style="width:100%;">2. Pratinjau Layar 9:16</h2>
         <canvas id="videoCanvas" width="720" height="1280"></canvas>
-        <div class="status-bar" id="statusBar">Siap digunakan. Impor data Sheets atau unggah foto produk.</div>
+        <div class="status-bar" id="statusBar">Siap digunakan. Impor CSV/Paste atau unggah foto produk.</div>
       </div>
     </div>
   </div>
@@ -316,67 +321,71 @@
       dark:   { bgTop: '#090d16', bgBot: '#1e293b', card: '#111827', text: '#f8fafc', badgeBg: '#f59e0b', badgeText: '#111827', hookBg: '#f59e0b', hookText: '#090d16' }
     };
 
-    // ================= 0. IMPOR GOOGLE SHEETS (CSV / TSV PASTE / URL) =================
+    // ================= 0. IMPOR CSV / PASTE GOOGLE SHEETS =================
     document.getElementById('toggleImportBtn').addEventListener('click', () => {
       document.getElementById('importDrawer').classList.toggle('open');
     });
 
     function parseDelimitedText(rawText) {
-      const text = rawText.replace(/
+      const text = (rawText || '').replace(/
 /g, '
 ').replace(//g, '
 ').trim();
       if (!text) return [];
 
-      // Deteksi pemisah: Tab (jika copy-paste langsung dari Google Sheets) atau Koma/Titik Koma (CSV)
-      const firstLine = text.split('
-')[0];
+      const lines = text.split('
+').filter(l => l.trim() !== '');
+      const firstLine = lines[0];
       let delimiter = ',';
       if (firstLine.includes('	')) delimiter = '	';
       else if (firstLine.split(';').length > firstLine.split(',').length) delimiter = ';';
+      else if (!firstLine.includes(',') && firstLine.includes('|')) delimiter = '|';
 
       const rows = [];
-      let cur = '', inQuotes = false, row = [];
-      for (let i = 0; i < text.length; i++) {
-        const ch = text[i];
-        const next = text[i + 1];
-        if (ch === '"') {
-          if (inQuotes && next === '"') { cur += '"'; i++; }
-          else { inQuotes = !inQuotes; }
-        } else if (ch === delimiter && !inQuotes) {
-          row.push(cur.trim());
-          cur = '';
-        } else if (ch === '
-' && !inQuotes) {
-          row.push(cur.trim());
-          if (row.some(cell => cell !== '')) rows.push(row);
-          row = [];
-          cur = '';
-        } else {
-          cur += ch;
+      lines.forEach((line) => {
+        const cols = [];
+        let cur = '';
+        let inQuotes = false;
+        for (let i = 0; i < line.length; i++) {
+          const ch = line[i];
+          const next = line[i + 1];
+          if (ch === '"') {
+            if (inQuotes && next === '"') {
+              cur += '"';
+              i++;
+            } else {
+              inQuotes = !inQuotes;
+            }
+          } else if (ch === delimiter && !inQuotes) {
+            cols.push(cur.trim());
+            cur = '';
+          } else {
+            cur += ch;
+          }
         }
-      }
-      row.push(cur.trim());
-      if (row.some(cell => cell !== '')) rows.push(row);
+        cols.push(cur.trim());
+        if (cols.some(c => c !== '')) rows.push(cols);
+      });
+
       return rows;
     }
 
     function extractPriceFromText(text) {
       if (!text) return '';
-      const match = text.match(/(?:rp\.?\s*[\d.,]+|diskon\s*\d+%)/i);
+      const match = text.match(/(?:rp\.?\s*[\d.,]+(?:\s*(?:rb|ribu|jt))?|diskon\s*\d+%)/i);
       return match ? match[0].toUpperCase() : '';
     }
 
     function processImportedRows(rows) {
-      if (!rows.length) {
-        statusBar.textContent = 'Data kosong atau format tidak terbaca.';
+      if (!rows || !rows.length) {
+        statusBar.textContent = 'Data CSV/teks kosong atau tidak terbaca.';
         return;
       }
 
-      // Cek apakah baris pertama adalah header
-      const firstRowLower = rows[0].map(c => c.toLowerCase());
+      const firstRowLower = rows[0].map(c => (c || '').toLowerCase());
       const hasHeader = firstRowLower.some(c =>
-        c.includes('nama produk') || c.includes('caption') || c.includes('hook') || c.includes('produk')
+        c.includes('nama produk') || c.includes('caption') || c.includes('hook') ||
+        c.includes('harga') || c.includes('promo') || c.includes('link') || c.includes('status')
       );
 
       let colMap = { name: 0, hook: 1, link: 2, hashtag: 3, imageUrl: 4, status: 5, vo: 6, price: -1 };
@@ -394,17 +403,17 @@
       }
 
       const parsed = dataRows.map((r, idx) => {
-        const name = r[colMap.name] || `Produk #${idx + 1}`;
-        const hook = r[colMap.hook] || `REKOMENDASI ${name.toUpperCase()}`;
-        const explicitPrice = colMap.price >= 0 ? r[colMap.price] : '';
-        const detectedPrice = explicitPrice || extractPriceFromText(hook) || extractPriceFromText(name) || 'PROMO SPESIAL HARI INI';
-        const imageUrl = r[colMap.imageUrl] || '';
-        const vo = r[colMap.vo] || hook;
-        return { name, hook, price: detectedPrice, imageUrl, vo };
+        const name = (r[colMap.name] || '').trim() || `Produk #${idx + 1}`;
+        const hook = (r[colMap.hook] || '').trim() || `REKOMENDASI ${name.toUpperCase()}`;
+        const explicitPrice = colMap.price >= 0 ? (r[colMap.price] || '').trim() : '';
+        const imageUrl = (r[colMap.imageUrl] || '').trim();
+        const vo = (r[colMap.vo] || '').trim() || hook;
+        const price = explicitPrice || extractPriceFromText(hook) || extractPriceFromText(name) || 'PROMO SPESIAL HARI INI';
+        return { name, hook, price, imageUrl, vo };
       }).filter(item => item.name && item.name !== '-');
 
       if (!parsed.length) {
-        statusBar.textContent = 'Tidak ditemukan baris produk yang valid.';
+        statusBar.textContent = 'Tidak ada baris produk yang bisa dimuat.';
         return;
       }
 
@@ -412,7 +421,7 @@
       sheetProductSelect.innerHTML = '';
       importedProducts.forEach((item, i) => {
         const opt = document.createElement('option');
-        opt.value = i;
+        opt.value = String(i);
         opt.textContent = `${i + 1}. ${item.name} — ${item.price}`;
         sheetProductSelect.appendChild(opt);
       });
@@ -423,7 +432,7 @@
 
       const statusPill = document.getElementById('sheetImportStatus');
       statusPill.style.display = 'inline-block';
-      statusPill.textContent = `✔ ${importedProducts.length} produk berhasil dimuat dari Google Sheets`;
+      statusPill.textContent = `✔ ${importedProducts.length} produk siap dipilih di dropdown`;
 
       applyProductFromSheet(0);
     }
@@ -431,14 +440,13 @@
     function applyProductFromSheet(index) {
       const item = importedProducts[index];
       if (!item) return;
-      sheetProductSelect.value = index;
+      sheetProductSelect.value = String(index);
       document.getElementById('productName').value = item.name.slice(0, 45);
       document.getElementById('hookText').value = item.hook.slice(0, 75);
       document.getElementById('priceTag').value = item.price.slice(0, 35);
       document.getElementById('voScript').value = item.vo;
 
-      // Jika ada URL gambar publik di kolom URL Gambar, coba muat otomatis
-      if (item.imageUrl && item.imageUrl.startsWith('http')) {
+      if (item.imageUrl && /^https?:\/\//i.test(item.imageUrl)) {
         const img = new Image();
         img.crossOrigin = 'anonymous';
         img.onload = () => {
@@ -448,21 +456,22 @@
           thumb.src = item.imageUrl;
           thumbList.appendChild(thumb);
           drawFrame(0, 0.3, 0.1);
-          statusBar.textContent = `Produk "${item.name}" & gambar URL berhasil dimuat.`;
+          statusBar.textContent = `Memuat "${item.name}" beserta gambar URL.`;
         };
         img.onerror = () => {
           drawFrame(0, 0.3, 0.1);
-          statusBar.textContent = `Teks "${item.name}" dimuat. Silakan upload foto produk jika gambar URL diblokir CORS.`;
+          statusBar.textContent = `Data "${item.name}" dimuat (unggah foto lokal jika URL gambar terblokir).`;
         };
         img.src = item.imageUrl;
       } else {
         drawFrame(0, 0.3, 0.1);
-        statusBar.textContent = `Produk "${item.name}" dipilih. Siap preview atau render video.`;
+        statusBar.textContent = `Produk "${item.name}" aktif (${index + 1}/${importedProducts.length}).`;
       }
     }
 
     sheetProductSelect.addEventListener('change', (e) => {
-      applyProductFromSheet(parseInt(e.target.value, 10));
+      const idx = parseInt(e.target.value, 10);
+      if (!Number.isNaN(idx)) applyProductFromSheet(idx);
     });
 
     prevItemBtn.addEventListener('click', () => {
@@ -479,21 +488,33 @@
       applyProductFromSheet(next);
     });
 
-    document.getElementById('parsePasteBtn').addEventListener('click', () => {
-      const raw = document.getElementById('pasteSheetsArea').value;
-      const rows = parseDelimitedText(raw);
-      processImportedRows(rows);
-    });
+    function handleParsePasteAction() {
+      const area = document.getElementById('pasteSheetsArea');
+      let raw = area.value.trim();
+      if (!raw) {
+        // Jika kotak kosong, isi otomatis contoh lalu proses agar tombol tetap langsung berfungsi
+        raw = getSampleCsvText();
+        area.value = raw;
+      }
+      processImportedRows(parseDelimitedText(raw));
+    }
 
-    document.getElementById('csvFileInput').addEventListener('change', (e) => {
-      const file = e.target.files[0];
+    document.getElementById('parsePasteBtn').addEventListener('click', handleParsePasteAction);
+
+    const csvFileInputEl = document.getElementById('csvFileInput');
+    csvFileInputEl.addEventListener('change', (e) => {
+      const file = e.target.files && e.target.files[0];
       if (!file) return;
       const reader = new FileReader();
       reader.onload = (ev) => {
-        const rows = parseDelimitedText(ev.target.result);
-        processImportedRows(rows);
+        const text = ev.target && ev.target.result ? String(ev.target.result) : '';
+        document.getElementById('pasteSheetsArea').value = text;
+        processImportedRows(parseDelimitedText(text));
       };
-      reader.readAsText(file);
+      reader.onerror = () => {
+        statusBar.textContent = 'Gagal membaca file CSV.';
+      };
+      reader.readAsText(file, 'UTF-8');
     });
 
     document.getElementById('fetchUrlBtn').addEventListener('click', async () => {
@@ -502,82 +523,125 @@
         statusBar.textContent = 'Masukkan link CSV Google Sheets terlebih dahulu.';
         return;
       }
-      statusBar.textContent = 'Mengambil data dari Google Sheets...';
+      statusBar.textContent = 'Mengambil data CSV dari Google Sheets...';
       try {
         const res = await fetch(url);
-        if (!res.ok) throw new Error('Gagal mengakses URL');
+        if (!res.ok) throw new Error('HTTP ' + res.status);
         const text = await res.text();
+        document.getElementById('pasteSheetsArea').value = text;
         processImportedRows(parseDelimitedText(text));
       } catch (err) {
-        statusBar.textContent = 'Gagal mengambil URL (pastikan Sheets sudah Publish to Web format CSV, atau gunakan Copy-Paste).';
+        statusBar.textContent = 'URL CSV tidak dapat diakses langsung (CORS). Gunakan Upload File CSV atau Copy-Paste.';
       }
     });
 
-    document.getElementById('loadSampleBtn').addEventListener('click', () => {
-      const sampleTsv = [
-        "Nama Produk	Caption	Link Affiliate	Hashtag	URL Gambar	Status	Naskah VO",
-        "Kipas Mini Turbo Portable	Gerah pas di jalan? Kipas mini ini anginnya kenceng banget! Diskon Rp 39.000	https://s.shopee.co.id/contoh1	#racunshopee		READY	Gerah pas lagi di jalan? Cobain kipas mini turbo ini! Anginnya kenceng banget dan lagi diskon jadi tiga puluh sembilan ribu aja. Cek keranjang oranye sekarang!",
-        "Lampu Tidur Proyektor Bintang	Kamar estetik kayak di luar angkasa cuma Rp 45.000! 😍	https://s.shopee.co.id/contoh2	#dekorasikamar		READY	Pengen kamar tidur jadi estetik dan nyaman? Pasang lampu proyektor bintang ini! Harganya cuma empat puluh lima ribuan. Klik keranjang oranye sebelum kehabisan!",
-        "TWS Bluetooth Bass Mantap	Suara ngebass baterai awet 24 jam, promo Rp 59.000 hari ini!	https://s.shopee.co.id/contoh3	#gadgetmurah		READY	Cari TWS murah tapi suaranya ngebass dan jernih? Ini pilihannya! Baterai awet seharian dan lagi promo lima puluh sembilan ribu. Buruan checkout sekarang!"
+    function getSampleCsvText() {
+      return [
+        "Nama Produk,Caption,Link Affiliate,Hashtag,URL Gambar,Status,Naskah VO",
+        "Kipas Mini Turbo Portable,"Gerah pas di jalan? Anginnya kenceng banget! Diskon Rp 39.000",https://s.shopee.co.id/contoh1,#racunshopee,,READY,"Gerah pas lagi di jalan? Cobain kipas mini turbo ini! Anginnya kenceng banget dan lagi diskon jadi tiga puluh sembilan ribu aja. Cek keranjang oranye sekarang!"",
+        "Lampu Tidur Proyektor Bintang,"Kamar estetik kayak di luar angkasa cuma Rp 45.000!",https://s.shopee.co.id/contoh2,#dekorasikamar,,READY,"Pengen kamar tidur jadi estetik dan nyaman? Pasang lampu proyektor bintang ini! Harganya cuma empat puluh lima ribuan. Klik keranjang oranye sebelum kehabisan!"",
+        "TWS Bluetooth Bass Mantap,"Suara ngebass baterai awet, promo Rp 59.000 hari ini!",https://s.shopee.co.id/contoh3,#gadgetmurah,,READY,"Cari TWS murah tapi suaranya ngebass dan jernih? Ini pilihannya! Baterai awet seharian dan lagi promo lima puluh sembilan ribu. Buruan checkout sekarang!""
       ].join('
 ');
-      document.getElementById('pasteSheetsArea').value = sampleTsv;
-      processImportedRows(parseDelimitedText(sampleTsv));
-    });
+    }
+
+    function applySampleAction() {
+      const sample = getSampleCsvText();
+      document.getElementById('pasteSheetsArea').value = sample;
+      processImportedRows(parseDelimitedText(sample));
+    }
+
+    document.getElementById('loadSampleBtn').addEventListener('click', applySampleAction);
+    document.getElementById('loadSampleDirectBtn').addEventListener('click', applySampleAction);
 
     // ================= 1. SETUP WEB SPEECH API (VOICE OVER) =================
     function populateVoices() {
-      if (!('speechSynthesis' in window)) {
-        voiceSelect.innerHTML = '<option value="">Browser tidak mendukung TTS</option>';
-        return;
-      }
-      availableVoices = speechSynthesis.getVoices();
       voiceSelect.innerHTML = '';
-      const sorted = [...availableVoices].sort((a, b) => {
-        const aId = a.lang.toLowerCase().includes('id') ? -1 : 1;
-        const bId = b.lang.toLowerCase().includes('id') ? -1 : 1;
-        return aId - bId;
-      });
+      const defaultOpt = document.createElement('option');
+      defaultOpt.value = '__auto_id__';
+      defaultOpt.textContent = 'Suara Bawaan Browser (id-ID)';
+      voiceSelect.appendChild(defaultOpt);
 
-      if (!sorted.length) {
-        voiceSelect.innerHTML = '<option value="">Suara Default Perangkat</option>';
+      if (!('speechSynthesis' in window)) {
+        const noApiOpt = document.createElement('option');
+        noApiOpt.value = '__none__';
+        noApiOpt.textContent = 'TTS Tidak Didukung (Mode Subtitle Aktif)';
+        voiceSelect.appendChild(noApiOpt);
         return;
       }
 
-      sorted.forEach((voice) => {
-        const opt = document.createElement('option');
-        opt.value = voice.name;
-        opt.textContent = `${voice.name} (${voice.lang})`;
-        if (voice.lang.toLowerCase().includes('id') && !voiceSelect.value) {
-          opt.selected = true;
-        }
-        voiceSelect.appendChild(opt);
-      });
+      try {
+        availableVoices = speechSynthesis.getVoices() || [];
+      } catch (e) {
+        availableVoices = [];
+      }
+
+      if (availableVoices.length > 0) {
+        const sorted = [...availableVoices].sort((a, b) => {
+          const aId = (a.lang || '').toLowerCase().includes('id') ? -1 : 1;
+          const bId = (b.lang || '').toLowerCase().includes('id') ? -1 : 1;
+          return aId - bId;
+        });
+
+        sorted.forEach((voice) => {
+          const opt = document.createElement('option');
+          opt.value = voice.name;
+          opt.textContent = `${voice.name} (${voice.lang})`;
+          if ((voice.lang || '').toLowerCase().includes('id')) {
+            opt.selected = true;
+          }
+          voiceSelect.appendChild(opt);
+        });
+      } else {
+        const fallbackOpt = document.createElement('option');
+        fallbackOpt.value = '__system_default__';
+        fallbackOpt.textContent = 'Suara Sistem Default (Perangkat Tanpa Daftar Suara)';
+        voiceSelect.appendChild(fallbackOpt);
+      }
     }
 
     if ('speechSynthesis' in window) {
       populateVoices();
-      speechSynthesis.onvoiceschanged = populateVoices;
+      if (typeof speechSynthesis.addEventListener === 'function') {
+        speechSynthesis.addEventListener('voiceschanged', populateVoices);
+      } else {
+        speechSynthesis.onvoiceschanged = populateVoices;
+      }
+      setTimeout(populateVoices, 500);
+    } else {
+      populateVoices();
     }
 
+    document.getElementById('refreshVoicesBtn').addEventListener('click', () => {
+      populateVoices();
+      statusBar.textContent = `Daftar suara diperbarui (${availableVoices.length} suara terdeteksi).`;
+    });
+
     function speakNarration() {
-      if (!('speechSynthesis' in window)) return;
-      speechSynthesis.cancel();
       if (!document.getElementById('voEnable').checked) return;
       const script = document.getElementById('voScript').value.trim();
       if (!script) return;
+      if (!('speechSynthesis' in window)) return;
 
-      const utter = new SpeechSynthesisUtterance(script);
-      utter.lang = 'id-ID';
-      utter.rate = parseFloat(document.getElementById('voiceRate').value) || 1.05;
-      const selectedVoice = availableVoices.find(v => v.name === voiceSelect.value);
-      if (selectedVoice) utter.voice = selectedVoice;
-      speechSynthesis.speak(utter);
+      try {
+        speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(script);
+        utter.lang = 'id-ID';
+        utter.rate = parseFloat(document.getElementById('voiceRate').value) || 1.05;
+
+        if (voiceSelect.value && !voiceSelect.value.startsWith('__')) {
+          const chosen = availableVoices.find(v => v.name === voiceSelect.value);
+          if (chosen) utter.voice = chosen;
+        }
+        speechSynthesis.speak(utter);
+      } catch (e) {
+        statusBar.textContent = 'Suara TTS dilewati oleh browser; subtitle tetap tampil di video.';
+      }
     }
 
     document.getElementById('testVoiceBtn').addEventListener('click', () => {
       speakNarration();
-      statusBar.textContent = 'Memutar tes suara narasi...';
+      statusBar.textContent = 'Menjalankan tes suara narasi & subtitle...';
     });
 
     // ================= 2. BUILT-IN WEB AUDIO SYNTH MUSIC =================
@@ -960,7 +1024,7 @@
           isRecording = false;
           previewBtn.disabled = false;
           exportBtn.disabled = false;
-          if ('speechSynthesis' in window) speechSynthesis.cancel();
+          if ('speechSynthesis' in window) { try { speechSynthesis.cancel(); } catch (e) {} }
           if (stopBuiltInSynth) stopBuiltInSynth();
           if (audioElement) audioElement.pause();
           if (audioCtx && audioCtx.state !== 'closed') audioCtx.close();
@@ -983,7 +1047,7 @@
         if (musicPreset !== 'none') {
           audioCtx = new (window.AudioContext || window.webkitAudioContext)();
           const dest = audioCtx.createMediaStreamDestination();
-          stopBuiltInSynth = startBuiltInMusic(ctxAudio, dest, musicPreset);
+          stopBuiltInSynth = startBuiltInMusic(audioCtx, dest, musicPreset);
         }
         statusBar.textContent = `Memutar pratinjau + suara (${totalSec.toFixed(1)} detik)...`;
       }
@@ -996,7 +1060,7 @@
           if (recordMode && mediaRecorder && mediaRecorder.state !== 'inactive') {
             mediaRecorder.stop();
           } else {
-            if ('speechSynthesis' in window) speechSynthesis.cancel();
+            if ('speechSynthesis' in window) { try { speechSynthesis.cancel(); } catch (e) {} }
             if (stopBuiltInSynth) stopBuiltInSynth();
             if (audioCtx && audioCtx.state !== 'closed') audioCtx.close();
             statusBar.textContent = 'Pratinjau selesai. Klik Generate & Download Video untuk mengunduh.';
