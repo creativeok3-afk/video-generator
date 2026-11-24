@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Shopee Video Generator 9:16 — Gratis & Offline</title>
+  <title>Shopee Video Generator 9:16 v2 — Voice Over & Musik Bawaan</title>
   <style>
     :root {
       --primary: #ee4d2d;
@@ -16,7 +16,7 @@
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
     body { background: var(--bg); color: var(--text); min-height: 100vh; padding: 16px; }
-    .container { max-width: 1120px; margin: 0 auto; }
+    .container { max-width: 1140px; margin: 0 auto; }
     header {
       display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
       gap: 12px; padding-bottom: 16px; border-bottom: 1px solid var(--border); margin-bottom: 20px;
@@ -33,17 +33,31 @@
       width: 100%; background: #0f172a; border: 1px solid var(--border); color: var(--text);
       padding: 10px 12px; border-radius: 8px; font-size: 0.92rem; outline: none;
     }
+    textarea { resize: vertical; min-height: 68px; line-height: 1.4; }
     input[type="text"]:focus, select:focus, textarea:focus { border-color: var(--primary); }
     input[type="file"] {
       width: 100%; background: #0f172a; border: 1px dashed var(--border); color: var(--muted);
-      padding: 10px; border-radius: 8px; font-size: 0.85rem; cursor: pointer;
+      padding: 9px; border-radius: 8px; font-size: 0.84rem; cursor: pointer;
     }
     .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+    @media (max-width: 560px) { .row-2, .row-3 { grid-template-columns: 1fr; } }
     .thumbs { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
     .thumbs img { width: 54px; height: 54px; object-fit: cover; border-radius: 8px; border: 2px solid var(--border); }
-    .checkbox-row { display: flex; align-items: center; gap: 8px; font-size: 0.86rem; color: #cbd5e1; cursor: pointer; }
+    .checkbox-row { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #cbd5e1; cursor: pointer; }
+    .sub-box {
+      background: #0f172a; border: 1px solid var(--border); border-radius: 10px; padding: 12px; margin-bottom: 14px;
+    }
+    .sub-box-title {
+      font-size: 0.84rem; font-weight: 700; color: #facc15; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .btn-mini {
+      background: #334155; color: #fff; border: none; border-radius: 6px; padding: 4px 10px;
+      font-size: 0.78rem; font-weight: 600; cursor: pointer;
+    }
+    .btn-mini:hover { background: #475569; }
     .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
-    button {
+    button.main-btn {
       border: none; border-radius: 10px; padding: 12px 14px; font-weight: 700; font-size: 0.9rem;
       cursor: pointer; transition: 0.15s ease; display: flex; align-items: center; justify-content: center; gap: 6px;
     }
@@ -67,8 +81,8 @@
 <body>
   <div class="container">
     <header>
-      <h1>🎬 Shopee Video Generator <span class="badge">9:16 • 100% Gratis</span></h1>
-      <div style="font-size:0.84rem; color:#94a3b8;">Siap Upload ke Shopee Video, Reels &amp; TikTok</div>
+      <h1>🎬 Shopee Video Generator <span class="badge">v2.0 • Voice Over &amp; Musik</span></h1>
+      <div style="font-size:0.84rem; color:#94a3b8;">100% Gratis • Tanpa Server • Siap Upload</div>
     </header>
 
     <div class="grid">
@@ -102,37 +116,85 @@
           <input type="text" id="ctaText" value="Cek Keranjang Oranye Sebelum Kehabisan 👇" maxlength="50" />
         </div>
 
-        <div class="row-2">
-          <div class="form-group">
-            <label>Tema Warna Template</label>
-            <select id="themeSelect">
-              <option value="shopee">Shopee Oranye Energi</option>
-              <option value="flash">Flash Sale Merah Kuning</option>
-              <option value="clean">Minimalis Putih Bersih</option>
-              <option value="dark">Elegan Gelap Emas</option>
-            </select>
+        <!-- FITUR BARU 1: VOICE OVER OTOMATIS -->
+        <div class="sub-box">
+          <div class="sub-box-title">
+            <span>🎙️ Voice Over Otomatis (Text-to-Speech)</span>
+            <button type="button" class="btn-mini" id="testVoiceBtn">🔊 Tes Suara</button>
           </div>
-          <div class="form-group">
-            <label>Durasi per Foto</label>
-            <select id="slideDuration">
-              <option value="2.5">2.5 Detik / Foto</option>
-              <option value="3" selected>3 Detik / Foto (Rekomendasi)</option>
-              <option value="4">4 Detik / Foto</option>
-            </select>
+          <div class="form-group" style="margin-bottom:10px;">
+            <label class="checkbox-row">
+              <input type="checkbox" id="voEnable" checked />
+              Aktifkan narasi suara otomatis &amp; subtitle di video
+            </label>
+          </div>
+          <div class="form-group" style="margin-bottom:10px;">
+            <label>Naskah Narasi / Voice Over (Bahasa Indonesia)</label>
+            <textarea id="voScript" placeholder="Tulis naskah yang akan dibacakan...">Gerah pas lagi di jalan? Cobain kipas mini turbo ini! Anginnya kenceng banget, baterainya awet, dan lagi promo diskon hari ini. Klik keranjang oranye sekarang!</textarea>
+          </div>
+          <div class="row-2">
+            <div>
+              <label>Pilih Suara Perangkat</label>
+              <select id="voiceSelect"></select>
+            </div>
+            <div>
+              <label>Kecepatan Bicara</label>
+              <select id="voiceRate">
+                <option value="0.95">Agak Santai (0.95x)</option>
+                <option value="1.08" selected>Normal Enerjik (1.08x)</option>
+                <option value="1.2">Cepat TikTok/Shopee (1.2x)</option>
+              </select>
+            </div>
           </div>
         </div>
 
-        <div class="row-2">
+        <!-- FITUR BARU 2: MUSIK LATAR BAWAAN -->
+        <div class="sub-box">
+          <div class="sub-box-title">
+            <span>🎵 Musik Latar Bawaan (Tanpa Upload File)</span>
+            <button type="button" class="btn-mini" id="testMusicBtn">▶ Tes Musik</button>
+          </div>
+          <div class="row-2">
+            <div>
+              <label>Pilih Beat / Musik Latar</label>
+              <select id="musicPreset">
+                <option value="none">Tanpa Musik Latar</option>
+                <option value="upbeat" selected>Shopee Promo Upbeat (Ceria)</option>
+                <option value="chill">Aesthetic Lo-Fi Santai</option>
+                <option value="flash">Flash Sale Cepat &amp; Tegas</option>
+              </select>
+            </div>
+            <div>
+              <label>Atau Upload MP3 Sendiri (Opsional)</label>
+              <input type="file" id="audioInput" accept="audio/*" />
+            </div>
+          </div>
+        </div>
+
+        <div class="row-3">
           <div class="form-group">
-            <label>Resolusi Video</label>
-            <select id="resSelect">
-              <option value="720x1280" selected>HD 720×1280 (Ringan &amp; Cepat)</option>
-              <option value="1080x1920">Full HD 1080×1920</option>
+            <label>Tema Warna</label>
+            <select id="themeSelect">
+              <option value="shopee">Shopee Oranye</option>
+              <option value="flash">Flash Sale Merah</option>
+              <option value="clean">Minimalis Putih</option>
+              <option value="dark">Elegan Gelap</option>
             </select>
           </div>
           <div class="form-group">
-            <label>Audio Latar (Opsional MP3/WAV)</label>
-            <input type="file" id="audioInput" accept="audio/*" />
+            <label>Durasi / Foto</label>
+            <select id="slideDuration">
+              <option value="2.5">2.5 Detik</option>
+              <option value="3" selected>3 Detik</option>
+              <option value="4">4 Detik</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Resolusi Video</label>
+            <select id="resSelect">
+              <option value="720x1280" selected>HD 720×1280</option>
+              <option value="1080x1920">FHD 1080×1920</option>
+            </select>
           </div>
         </div>
 
@@ -144,11 +206,11 @@
         </div>
 
         <div class="btn-group">
-          <button type="button" class="btn-secondary" id="previewBtn">▶ Preview Animasi</button>
-          <button type="button" class="btn-primary" id="exportBtn">⬇ Generate &amp; Download Video</button>
+          <button type="button" class="main-btn btn-secondary" id="previewBtn">▶ Preview Animasi</button>
+          <button type="button" class="main-btn btn-primary" id="exportBtn">⬇ Generate &amp; Download Video</button>
         </div>
         <p class="tips">
-          💡 <strong>Tips:</strong> Jika belum mengunggah foto, sistem otomatis menampilkan contoh pratinjau. Hasil video berformat <code>.webm</code> / <code>.mp4</code> yang langsung kompatibel diunggah ke aplikasi Shopee Video, Instagram Reels, dan TikTok.
+          💡 <strong>Catatan Rekam Audio:</strong> Musik latar bawaan dan file MP3 otomatis terekam ke dalam file video. Untuk suara narasi (<em>Web Speech API</em>), jika browser membatasi perekaman suara sistem secara langsung, aplikasi tetap menampilkan <strong>subtitle otomatis</strong> di video dan membacakan suaranya saat preview/rekam.
         </p>
       </div>
 
@@ -169,10 +231,13 @@
     const statusBar = document.getElementById('statusBar');
     const previewBtn = document.getElementById('previewBtn');
     const exportBtn = document.getElementById('exportBtn');
+    const voiceSelect = document.getElementById('voiceSelect');
 
     let loadedImages = [];
     let animFrameId = null;
     let isRecording = false;
+    let availableVoices = [];
+    let previewSynthStop = null;
 
     const themes = {
       shopee: { bgTop: '#ee4d2d', bgBot: '#ff7337', card: '#ffffff', text: '#1e293b', badgeBg: '#facc15', badgeText: '#111827', hookBg: '#111827', hookText: '#ffffff' },
@@ -181,6 +246,151 @@
       dark:   { bgTop: '#090d16', bgBot: '#1e293b', card: '#111827', text: '#f8fafc', badgeBg: '#f59e0b', badgeText: '#111827', hookBg: '#f59e0b', hookText: '#090d16' }
     };
 
+    // ================= 1. SETUP WEB SPEECH API (VOICE OVER) =================
+    function populateVoices() {
+      if (!('speechSynthesis' in window)) {
+        voiceSelect.innerHTML = '<option value="">Browser tidak mendukung TTS</option>';
+        return;
+      }
+      availableVoices = speechSynthesis.getVoices();
+      voiceSelect.innerHTML = '';
+      // Prioritaskan suara Bahasa Indonesia (id-ID)
+      const sorted = [...availableVoices].sort((a, b) => {
+        const aId = a.lang.toLowerCase().includes('id') ? -1 : 1;
+        const bId = b.lang.toLowerCase().includes('id') ? -1 : 1;
+        return aId - bId;
+      });
+
+      if (!sorted.length) {
+        voiceSelect.innerHTML = '<option value="">Suara Default Perangkat</option>';
+        return;
+      }
+
+      sorted.forEach((voice) => {
+        const opt = document.createElement('option');
+        opt.value = voice.name;
+        opt.textContent = `${voice.name} (${voice.lang})`;
+        if (voice.lang.toLowerCase().includes('id') && !voiceSelect.value) {
+          opt.selected = true;
+        }
+        voiceSelect.appendChild(opt);
+      });
+    }
+
+    if ('speechSynthesis' in window) {
+      populateVoices();
+      speechSynthesis.onvoiceschanged = populateVoices;
+    }
+
+    function speakNarration() {
+      if (!('speechSynthesis' in window)) return;
+      speechSynthesis.cancel();
+      if (!document.getElementById('voEnable').checked) return;
+      const script = document.getElementById('voScript').value.trim();
+      if (!script) return;
+
+      const utter = new SpeechSynthesisUtterance(script);
+      utter.lang = 'id-ID';
+      utter.rate = parseFloat(document.getElementById('voiceRate').value) || 1.05;
+      const selectedVoice = availableVoices.find(v => v.name === voiceSelect.value);
+      if (selectedVoice) utter.voice = selectedVoice;
+      speechSynthesis.speak(utter);
+    }
+
+    document.getElementById('testVoiceBtn').addEventListener('click', () => {
+      speakNarration();
+      statusBar.textContent = 'Memutar tes suara narasi...';
+    });
+
+    // ================= 2. BUILT-IN WEB AUDIO SYNTH MUSIC =================
+    function startBuiltInMusic(audioCtx, destinationNode, preset) {
+      if (preset === 'none') return () => {};
+
+      const masterGain = audioCtx.createGain();
+      masterGain.gain.value = 0.16;
+      masterGain.connect(destinationNode);
+      masterGain.connect(audioCtx.destination);
+
+      const configs = {
+        upbeat: { tempo: 128, notes: [523.25, 659.25, 783.99, 1046.5, 783.99, 659.25, 587.33, 783.99], type: 'triangle' },
+        chill:  { tempo: 88,  notes: [392.00, 493.88, 587.33, 659.25, 587.33, 493.88, 440.00, 523.25], type: 'sine' },
+        flash:  { tempo: 145, notes: [440.00, 440.00, 523.25, 659.25, 587.33, 659.25, 783.99, 880.00], type: 'sawtooth' }
+      };
+      const cfg = configs[preset] || configs.upbeat;
+      const stepSec = 60 / cfg.tempo / 2;
+      let stepIdx = 0;
+      let stopped = false;
+
+      const intervalId = setInterval(() => {
+        if (stopped || audioCtx.state === 'closed') return;
+        const now = audioCtx.currentTime;
+
+        // Melodic pluck
+        const osc = audioCtx.createOscillator();
+        const noteGain = audioCtx.createGain();
+        osc.type = cfg.type;
+        osc.frequency.setValueAtTime(cfg.notes[stepIdx % cfg.notes.length], now);
+
+        noteGain.gain.setValueAtTime(0.001, now);
+        noteGain.gain.exponentialRampToValueAtTime(0.35, now + 0.02);
+        noteGain.gain.exponentialRampToValueAtTime(0.001, now + stepSec * 0.9);
+
+        osc.connect(noteGain);
+        noteGain.connect(masterGain);
+        osc.start(now);
+        osc.stop(now + stepSec);
+
+        // Kick pulse every 2 steps
+        if (stepIdx % 2 === 0) {
+          const kick = audioCtx.createOscillator();
+          const kickGain = audioCtx.createGain();
+          kick.type = 'sine';
+          kick.frequency.setValueAtTime(135, now);
+          kick.frequency.exponentialRampToValueAtTime(42, now + 0.12);
+          kickGain.gain.setValueAtTime(0.6, now);
+          kickGain.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
+          kick.connect(kickGain);
+          kickGain.connect(masterGain);
+          kick.start(now);
+          kick.stop(now + 0.15);
+        }
+
+        stepIdx++;
+      }, stepSec * 1000);
+
+      return () => {
+        stopped = true;
+        clearInterval(intervalId);
+      };
+    }
+
+    document.getElementById('testMusicBtn').addEventListener('click', () => {
+      if (previewSynthStop) {
+        previewSynthStop();
+        previewSynthStop = null;
+        statusBar.textContent = 'Tes musik dihentikan.';
+        return;
+      }
+      const preset = document.getElementById('musicPreset').value;
+      if (preset === 'none') {
+        statusBar.textContent = 'Pilih salah satu musik latar terlebih dahulu.';
+        return;
+      }
+      const ctxAudio = new (window.AudioContext || window.webkitAudioContext)();
+      const dummyDest = ctxAudio.createMediaStreamDestination();
+      const stopFn = startBuiltInMusic(ctxAudio, dummyDest, preset);
+      statusBar.textContent = 'Memutar tes musik latar (4 detik)...';
+      previewSynthStop = () => {
+        stopFn();
+        ctxAudio.close();
+        previewSynthStop = null;
+      };
+      setTimeout(() => {
+        if (previewSynthStop) previewSynthStop();
+      }, 4000);
+    });
+
+    // ================= 3. CANVAS RENDERING & SUBTITLE =================
     function createPlaceholderImage() {
       const off = document.createElement('canvas');
       off.width = 720; off.height = 720;
@@ -202,7 +412,7 @@
     }
 
     const placeholderImg = createPlaceholderImage();
-    placeholderImg.onload = () => drawFrame(0, 0.35);
+    placeholderImg.onload = () => drawFrame(0, 0.35, 0.15);
 
     imageInput.addEventListener('change', (e) => {
       const files = Array.from(e.target.files).slice(0, 5);
@@ -219,7 +429,7 @@
             count++;
             if (count === files.length) {
               statusBar.textContent = `${loadedImages.length} foto produk dimuat.`;
-              drawFrame(0, 0.3);
+              drawFrame(0, 0.3, 0.1);
             }
           };
           img.src = ev.target.result;
@@ -235,12 +445,12 @@
       const [w, h] = e.target.value.split('x').map(Number);
       canvas.width = w;
       canvas.height = h;
-      drawFrame(0, 0.3);
+      drawFrame(0, 0.3, 0.1);
     });
 
-    ['hookText', 'productName', 'priceTag', 'ctaText', 'themeSelect', 'safeZoneToggle'].forEach(id => {
+    ['hookText', 'productName', 'priceTag', 'ctaText', 'themeSelect', 'safeZoneToggle', 'voScript', 'voEnable'].forEach(id => {
       document.getElementById(id).addEventListener('input', () => {
-        if (!isRecording) drawFrame(0, 0.3);
+        if (!isRecording) drawFrame(0, 0.3, 0.1);
       });
     });
 
@@ -250,8 +460,7 @@
       const lines = [];
       for (let n = 0; n < words.length; n++) {
         const testLine = line + words[n] + ' ';
-        const metrics = context.measureText(testLine);
-        if (metrics.width > maxWidth && n > 0) {
+        if (context.measureText(testLine).width > maxWidth && n > 0) {
           lines.push(line.trim());
           line = words[n] + ' ';
         } else {
@@ -260,9 +469,7 @@
       }
       lines.push(line.trim());
       const startY = y - ((lines.length - 1) * lineHeight) / 2;
-      lines.forEach((l, idx) => {
-        context.fillText(l, x, startY + idx * lineHeight);
-      });
+      lines.forEach((l, idx) => context.fillText(l, x, startY + idx * lineHeight));
     }
 
     function roundRect(ctx, x, y, w, h, r) {
@@ -275,7 +482,20 @@
       ctx.closePath();
     }
 
-    function drawFrame(slideIdx, progress) {
+    function getSubtitleChunk(script, overallProgress) {
+      const clean = script.replace(/\s+/g, ' ').trim();
+      if (!clean) return '';
+      const words = clean.split(' ');
+      const chunkSize = 6;
+      const chunks = [];
+      for (let i = 0; i < words.length; i += chunkSize) {
+        chunks.push(words.slice(i, i + chunkSize).join(' '));
+      }
+      const idx = Math.min(chunks.length - 1, Math.floor(overallProgress * chunks.length));
+      return chunks[idx];
+    }
+
+    function drawFrame(slideIdx, progress, overallProgress = 0) {
       const W = canvas.width;
       const H = canvas.height;
       const scaleFactor = W / 720;
@@ -284,6 +504,8 @@
       const productName = document.getElementById('productName').value || 'Produk Pilihan';
       const priceTag = document.getElementById('priceTag').value || 'PROMO HARI INI';
       const ctaText = document.getElementById('ctaText').value || 'Cek Keranjang Oranye 👇';
+      const voEnabled = document.getElementById('voEnable').checked;
+      const voScript = document.getElementById('voScript').value || '';
       const showSafeZone = document.getElementById('safeZoneToggle').checked && !isRecording;
 
       // Background Gradient
@@ -293,32 +515,31 @@
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, W, H);
 
-      // Decorative subtle circles
       ctx.fillStyle = 'rgba(255,255,255,0.06)';
       ctx.beginPath();
       ctx.arc(W * 0.15, H * 0.2, 180 * scaleFactor, 0, Math.PI * 2);
       ctx.arc(W * 0.85, H * 0.78, 220 * scaleFactor, 0, Math.PI * 2);
       ctx.fill();
 
-      // Top Hook Banner (Safe from top status bar)
-      const hookBoxY = 125 * scaleFactor;
-      const hookBoxH = 125 * scaleFactor;
+      // Top Hook Banner
+      const hookBoxY = 115 * scaleFactor;
+      const hookBoxH = 118 * scaleFactor;
       const hookBoxW = W - 80 * scaleFactor;
       ctx.fillStyle = theme.hookBg;
       roundRect(ctx, 40 * scaleFactor, hookBoxY, hookBoxW, hookBoxH, 22 * scaleFactor);
       ctx.fill();
 
       ctx.fillStyle = theme.hookText;
-      ctx.font = `800 ${Math.round(32 * scaleFactor)}px sans-serif`;
+      ctx.font = `800 ${Math.round(31 * scaleFactor)}px sans-serif`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      wrapText(ctx, hookText, W / 2, hookBoxY + hookBoxH / 2, hookBoxW - 40 * scaleFactor, 40 * scaleFactor);
+      wrapText(ctx, hookText, W / 2, hookBoxY + hookBoxH / 2, hookBoxW - 40 * scaleFactor, 38 * scaleFactor);
 
       // Product Card Frame
       const cardX = 55 * scaleFactor;
-      const cardY = 275 * scaleFactor;
+      const cardY = 255 * scaleFactor;
       const cardW = W - 110 * scaleFactor;
-      const cardH = 610 * scaleFactor;
+      const cardH = 560 * scaleFactor;
 
       ctx.save();
       ctx.shadowColor = 'rgba(0,0,0,0.28)';
@@ -328,7 +549,6 @@
       ctx.fill();
       ctx.restore();
 
-      // Clip & Draw Zooming Product Image
       const imgs = loadedImages.length ? loadedImages : [placeholderImg];
       const img = imgs[slideIdx % imgs.length];
       ctx.save();
@@ -353,66 +573,72 @@
       ctx.drawImage(img, drawX, drawY, drawW, drawH);
       ctx.restore();
 
-      // Slide Counter Dots
-      if (imgs.length > 1) {
-        const dotY = cardY + cardH - 32 * scaleFactor;
-        const totalDotW = imgs.length * 18 * scaleFactor;
-        imgs.forEach((_, idx) => {
-          ctx.fillStyle = idx === (slideIdx % imgs.length) ? '#ee4d2d' : 'rgba(255,255,255,0.75)';
-          ctx.beginPath();
-          ctx.arc(W / 2 - totalDotW / 2 + idx * 18 * scaleFactor + 9 * scaleFactor, dotY, 6 * scaleFactor, 0, Math.PI * 2);
-          ctx.fill();
-        });
-      }
-
-      // Promo Price Badge overlapping bottom of card
-      const badgeW = 460 * scaleFactor;
-      const badgeH = 66 * scaleFactor;
+      // Promo Price Badge
+      const badgeW = 450 * scaleFactor;
+      const badgeH = 62 * scaleFactor;
       const badgeX = (W - badgeW) / 2;
-      const badgeY = cardY + cardH - 28 * scaleFactor;
+      const badgeY = cardY + cardH - 26 * scaleFactor;
       ctx.fillStyle = theme.badgeBg;
       roundRect(ctx, badgeX, badgeY, badgeW, badgeH, 999);
       ctx.fill();
 
       ctx.fillStyle = theme.badgeText;
-      ctx.font = `900 ${Math.round(30 * scaleFactor)}px sans-serif`;
+      ctx.font = `900 ${Math.round(29 * scaleFactor)}px sans-serif`;
       ctx.fillText(priceTag, W / 2, badgeY + badgeH / 2 + 2 * scaleFactor);
 
-      // Product Title & CTA (Kept above bottom Shopee UI safe-zone)
+      // Product Title
       ctx.fillStyle = '#ffffff';
-      ctx.font = `800 ${Math.round(34 * scaleFactor)}px sans-serif`;
-      ctx.fillText(productName, W / 2, 965 * scaleFactor);
+      ctx.font = `800 ${Math.round(33 * scaleFactor)}px sans-serif`;
+      ctx.fillText(productName, W / 2, 892 * scaleFactor);
+
+      // Dynamic Subtitle Caption from Voice Over Script
+      if (voEnabled && voScript.trim()) {
+        const subText = getSubtitleChunk(voScript, overallProgress);
+        if (subText) {
+          const subW = W - 130 * scaleFactor;
+          const subH = 54 * scaleFactor;
+          ctx.fillStyle = 'rgba(15, 23, 42, 0.82)';
+          roundRect(ctx, 65 * scaleFactor, 926 * scaleFactor, subW, subH, 12 * scaleFactor);
+          ctx.fill();
+
+          ctx.fillStyle = '#ffffff';
+          ctx.font = `700 ${Math.round(23 * scaleFactor)}px sans-serif`;
+          ctx.fillText(subText, W / 2, 926 * scaleFactor + subH / 2);
+        }
+      }
 
       // Animated Bounce CTA Pill
       const bounce = Math.sin(progress * Math.PI * 4) * 5 * scaleFactor;
       const ctaW = W - 120 * scaleFactor;
-      const ctaH = 64 * scaleFactor;
-      ctx.fillStyle = 'rgba(0,0,0,0.68)';
-      roundRect(ctx, 60 * scaleFactor, 1005 * scaleFactor + bounce, ctaW, ctaH, 16 * scaleFactor);
+      const ctaH = 60 * scaleFactor;
+      const ctaY = (voEnabled && voScript.trim() ? 995 : 945) * scaleFactor + bounce;
+      ctx.fillStyle = 'rgba(0,0,0,0.72)';
+      roundRect(ctx, 60 * scaleFactor, ctaY, ctaW, ctaH, 16 * scaleFactor);
       ctx.fill();
 
       ctx.fillStyle = '#fde047';
-      ctx.font = `700 ${Math.round(25 * scaleFactor)}px sans-serif`;
-      ctx.fillText(ctaText, W / 2, 1005 * scaleFactor + ctaH / 2 + bounce);
+      ctx.font = `700 ${Math.round(24 * scaleFactor)}px sans-serif`;
+      ctx.fillText(ctaText, W / 2, ctaY + ctaH / 2);
 
-      // Safe-Zone Overlay Guide (Preview Only)
+      // Safe-Zone Overlay Guide
       if (showSafeZone) {
         ctx.save();
         ctx.strokeStyle = 'rgba(56, 189, 248, 0.85)';
         ctx.lineWidth = 2 * scaleFactor;
         ctx.setLineDash([10 * scaleFactor, 8 * scaleFactor]);
-        // Right icons zone & bottom caption/cart zone
-        ctx.strokeRect(24 * scaleFactor, 100 * scaleFactor, W - 125 * scaleFactor, H - 290 * scaleFactor);
+        ctx.strokeRect(24 * scaleFactor, 95 * scaleFactor, W - 125 * scaleFactor, H - 285 * scaleFactor);
         ctx.fillStyle = 'rgba(56, 189, 248, 0.9)';
         ctx.font = `600 ${Math.round(18 * scaleFactor)}px sans-serif`;
         ctx.textAlign = 'left';
-        ctx.fillText('Area Aman Konten (Safe-Zone)', 32 * scaleFactor, 92 * scaleFactor);
+        ctx.fillText('Area Aman Konten (Safe-Zone)', 32 * scaleFactor, 88 * scaleFactor);
         ctx.restore();
       }
     }
 
     function runAnimation(recordMode = false) {
       if (animFrameId) cancelAnimationFrame(animFrameId);
+      if (previewSynthStop) previewSynthStop();
+
       const imgs = loadedImages.length ? loadedImages : [placeholderImg];
       const slideSec = parseFloat(document.getElementById('slideDuration').value);
       const totalSec = imgs.length * slideSec;
@@ -422,6 +648,10 @@
       let chunks = [];
       let audioCtx = null;
       let audioElement = null;
+      let stopBuiltInSynth = null;
+
+      // Jalankan Voice Over TTS saat mulai
+      speakNarration();
 
       if (recordMode) {
         isRecording = true;
@@ -432,17 +662,24 @@
         const canvasStream = canvas.captureStream(30);
         const tracks = [...canvasStream.getVideoTracks()];
 
-        // Optional Audio Track Mixing
-        if (audioInput.files && audioInput.files[0]) {
+        const hasCustomAudio = audioInput.files && audioInput.files[0];
+        const musicPreset = document.getElementById('musicPreset').value;
+
+        if (hasCustomAudio || musicPreset !== 'none') {
           audioCtx = new (window.AudioContext || window.webkitAudioContext)();
           const dest = audioCtx.createMediaStreamDestination();
-          audioElement = new Audio(URL.createObjectURL(audioInput.files[0]));
-          audioElement.crossOrigin = 'anonymous';
-          const source = audioCtx.createMediaElementSource(audioElement);
-          source.connect(dest);
-          source.connect(audioCtx.destination);
+
+          if (hasCustomAudio) {
+            audioElement = new Audio(URL.createObjectURL(audioInput.files[0]));
+            audioElement.crossOrigin = 'anonymous';
+            const source = audioCtx.createMediaElementSource(audioElement);
+            source.connect(dest);
+            source.connect(audioCtx.destination);
+            audioElement.play().catch(() => {});
+          } else {
+            stopBuiltInSynth = startBuiltInMusic(audioCtx, dest, musicPreset);
+          }
           tracks.push(...dest.stream.getAudioTracks());
-          audioElement.play().catch(() => {});
         }
 
         const combinedStream = new MediaStream(tracks);
@@ -456,8 +693,10 @@
           isRecording = false;
           previewBtn.disabled = false;
           exportBtn.disabled = false;
+          if ('speechSynthesis' in window) speechSynthesis.cancel();
+          if (stopBuiltInSynth) stopBuiltInSynth();
           if (audioElement) audioElement.pause();
-          if (audioCtx) audioCtx.close();
+          if (audioCtx && audioCtx.state !== 'closed') audioCtx.close();
 
           const ext = mimeType.includes('mp4') ? 'mp4' : 'webm';
           const blob = new Blob(chunks, { type: mimeType });
@@ -469,27 +708,37 @@
           a.download = `${safeName}-9x16.${ext}`;
           a.click();
           statusBar.textContent = `Selesai! File ${safeName}-9x16.${ext} berhasil diunduh.`;
-          drawFrame(0, 0.3);
+          drawFrame(0, 0.3, 0.1);
         };
         mediaRecorder.start();
       } else {
-        statusBar.textContent = `Memutar pratinjau (${totalSec.toFixed(1)} detik)...`;
+        const musicPreset = document.getElementById('musicPreset').value;
+        if (musicPreset !== 'none') {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          const dest = audioCtx.createMediaStreamDestination();
+          stopBuiltInSynth = startBuiltInMusic(audioCtx, dest, musicPreset);
+        }
+        statusBar.textContent = `Memutar pratinjau + suara (${totalSec.toFixed(1)} detik)...`;
       }
 
       function step(now) {
         const elapsed = (now - startTime) / 1000;
+        const overallProgress = Math.min(1, elapsed / totalSec);
         if (elapsed >= totalSec) {
-          drawFrame(imgs.length - 1, 1);
+          drawFrame(imgs.length - 1, 1, 1);
           if (recordMode && mediaRecorder && mediaRecorder.state !== 'inactive') {
             mediaRecorder.stop();
           } else {
+            if ('speechSynthesis' in window) speechSynthesis.cancel();
+            if (stopBuiltInSynth) stopBuiltInSynth();
+            if (audioCtx && audioCtx.state !== 'closed') audioCtx.close();
             statusBar.textContent = 'Pratinjau selesai. Klik Generate & Download Video untuk mengunduh.';
           }
           return;
         }
         const slideIdx = Math.floor(elapsed / slideSec);
         const progress = (elapsed % slideSec) / slideSec;
-        drawFrame(slideIdx, progress);
+        drawFrame(slideIdx, progress, overallProgress);
         animFrameId = requestAnimationFrame(step);
       }
 
