@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Shopee Video Generator 9:16 v3.8 — Anti-Blank &amp; Export MP4</title>
+  <title>Shopee Video Generator 9:16 v3.9 — GitHub Pages TTS Fix</title>
+  <link id="appFavicon" rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%231e293b'/%3E%3Cstop offset='100%25' stop-color='%230f172a'/%3E%3C/linearGradient%3E%3CradialGradient id='glow' cx='52%25' cy='50%25' r='44%25'%3E%3Cstop offset='0%25' stop-color='%23f97316' stop-opacity='0.65'/%3E%3Cstop offset='100%25' stop-color='%23ee4d2d' stop-opacity='0'/%3E%3C/radialGradient%3E%3ClinearGradient id='card' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%23ee4d2d'/%3E%3Cstop offset='65%25' stop-color='%23ff7337'/%3E%3Cstop offset='100%25' stop-color='%23facc15'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='112' fill='url(%23bg)'/%3E%3Ccircle cx='266' cy='256' r='220' fill='url(%23glow)'/%3E%3Cg transform='matrix(0.92, 0.24, 0, 1.02, 168, 72)'%3E%3Crect x='14' y='6' width='186' height='334' rx='30' fill='%23334155'/%3E%3Crect x='0' y='0' width='186' height='334' rx='30' fill='%23f8fafc' stroke='%23cbd5e1' stroke-width='4'/%3E%3Crect x='12' y='26' width='162' height='274' rx='18' fill='%230f172a'/%3E%3Crect x='72' y='11' width='42' height='6' rx='3' fill='%2364748b'/%3E%3Ccircle cx='93' cy='316' r='10' fill='none' stroke='%2394a3b8' stroke-width='3'/%3E%3Cpath d='M93 135 L100 153 L118 160 L100 167 L93 185 L86 167 L68 160 L86 153 Z' fill='%2394a3b8'/%3E%3Ccircle cx='66' cy='256' r='22' fill='%23e2e8f0'/%3E%3Cpolygon points='60,245 78,256 60,267' fill='%230f172a'/%3E%3Ccircle cx='124' cy='256' r='22' fill='%231e293b' stroke='%2394a3b8' stroke-width='2.5'/%3E%3Crect x='119' y='244' width='10' height='15' rx='5' fill='%23e2e8f0'/%3E%3Cpath d='M114 254 A10 10 0 0 0 134 254' fill='none' stroke='%23e2e8f0' stroke-width='2.5'/%3E%3C/g%3E%3Cg transform='matrix(0.92, 0.24, 0, 1.02, 118, 162)'%3E%3Crect x='0' y='0' width='124' height='176' rx='18' fill='url(%23card)' stroke='%23fed7aa' stroke-width='2.5'/%3E%3Crect x='22' y='18' width='80' height='8' rx='4' fill='%23ffffff' opacity='0.85'/%3E%3Crect x='18' y='40' width='88' height='82' rx='12' fill='%23ffedd5' stroke='%23ffffff' stroke-width='3'/%3E%3Crect x='24' y='136' width='76' height='10' rx='5' fill='%23111827' opacity='0.85'/%3E%3Crect x='34' y='152' width='56' height='8' rx='4' fill='%23ffffff' opacity='0.9'/%3E%3C/g%3E%3C/svg%3E" />
+  <link id="appAppleIcon" rel="apple-touch-icon" href="assets/app-icon.jpg" />
   <style>
     :root {
       --primary: #ee4d2d;
@@ -51,8 +53,19 @@
       font-size: 1.2rem;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       flex-wrap: wrap;
+    }
+
+    .header-app-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      object-fit: cover;
+      border: 1.5px solid rgba(251, 146, 60, 0.55);
+      box-shadow: 0 4px 12px rgba(238, 77, 45, 0.35);
+      flex-shrink: 0;
+      background: #1e293b;
     }
 
     .badge {
@@ -108,6 +121,7 @@
     }
 
     input[type="text"],
+    input[type="password"],
     select,
     textarea {
       width: 100%;
@@ -127,6 +141,7 @@
     }
 
     input[type="text"]:focus,
+    input[type="password"]:focus,
     select:focus,
     textarea:focus {
       border-color: var(--primary);
@@ -238,6 +253,14 @@
       background: #047857;
     }
 
+    .btn-mini.amber {
+      background: #d97706;
+    }
+
+    .btn-mini.amber:hover {
+      background: #b45309;
+    }
+
     .btn-mini.red {
       background: #dc2626;
     }
@@ -260,6 +283,18 @@
 
     .import-drawer.open {
       display: block;
+    }
+
+    .api-key-note {
+      font-size: 0.74rem;
+      color: #94a3b8;
+      line-height: 1.45;
+      margin-bottom: 8px;
+    }
+
+    .api-key-note a {
+      color: #38bdf8;
+      text-decoration: underline;
     }
 
     .btn-group {
@@ -403,16 +438,26 @@
       font-size: 0.74rem;
       background: rgba(16, 185, 129, 0.16);
       color: #6ee7b7;
-      padding: 3px 8px;
+      padding: 4px 8px;
       border-radius: 6px;
       margin-top: 8px;
+      line-height: 1.4;
+    }
+
+    .pill-info.warn {
+      background: rgba(245, 158, 11, 0.16);
+      color: #fcd34d;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <header>
-      <h1>🎬 Shopee Video Generator <span class="badge">v3.8 • Anti-Blank &amp; MP4</span></h1>
+      <h1>
+        <img id="headerAppLogo" class="header-app-icon" src="assets/app-icon.jpg" alt="Ikon Shopee Video Generator" />
+        <span>Shopee Video Generator</span>
+        <span class="badge">v3.9 • GitHub Pages TTS Fix</span>
+      </h1>
       <div style="font-size:0.8rem; color:#94a3b8;">Output: .MP4 (H.264 + Audio)</div>
     </header>
 
@@ -495,10 +540,26 @@
           <div class="sub-box-title">
             <span>🎙️ Narasi VO (Masuk ke MP4)</span>
             <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <button type="button" class="btn-mini amber" id="toggleApiKeyBtn">🔑 API Key</button>
               <button type="button" class="btn-mini" id="recordMicBtn">🎤 Rekam Mic</button>
               <button type="button" class="btn-mini" id="testVoiceBtn">🔊 Tes Narasi</button>
             </div>
           </div>
+
+          <!-- Drawer Pengaturan Gemini API Key untuk GitHub Pages -->
+          <div class="import-drawer" id="apiKeyDrawer" style="margin-top:0; margin-bottom:10px; padding-top:0; padding-bottom:10px; border-top:none; border-bottom:1px dashed var(--border);">
+            <div class="api-key-note">
+              Saat dibuka di <strong>GitHub Pages</strong>, masukkan <strong>Gemini API Key gratis</strong> dari
+              <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer">Google AI Studio</a>
+              agar suara AI TTS tetap jernih &amp; otomatis masuk ke file MP4. Key hanya disimpan di browser HP/PC Anda (tidak di-upload ke GitHub).
+            </div>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <input type="password" id="customApiKeyInput" placeholder="Tempel Gemini API Key (AIza...)" style="flex:1; min-width:180px;" />
+              <button type="button" class="btn-mini green" id="saveApiKeyBtn">💾 Simpan</button>
+              <button type="button" class="btn-mini red" id="clearApiKeyBtn">Hapus</button>
+            </div>
+          </div>
+
           <div class="form-group" style="margin-bottom:8px;">
             <label class="checkbox-row">
               <input type="checkbox" id="voEnable" checked />
@@ -621,9 +682,125 @@
 
       try {
         // =====================================================================
+        // INISIALISASI IKON APLIKASI EMBEDDED + FALLBACK REPOSITORY GITHUB
+        // =====================================================================
+        function createEmbeddedAppIconDataUrl() {
+          const ic = document.createElement('canvas');
+          ic.width = 256;
+          ic.height = 256;
+          const ictx = ic.getContext('2d');
+          if (!ictx) return '';
+
+          const r = 54;
+          ictx.beginPath();
+          ictx.moveTo(r, 0);
+          ictx.lineTo(256 - r, 0);
+          ictx.quadraticCurveTo(256, 0, 256, r);
+          ictx.lineTo(256, 256 - r);
+          ictx.quadraticCurveTo(256, 256, 256 - r, 256);
+          ictx.lineTo(r, 256);
+          ictx.quadraticCurveTo(0, 256, 0, 256 - r);
+          ictx.lineTo(0, r);
+          ictx.quadraticCurveTo(0, 0, r, 0);
+          ictx.closePath();
+
+          const bgGrad = ictx.createLinearGradient(0, 0, 256, 256);
+          bgGrad.addColorStop(0, '#1e293b');
+          bgGrad.addColorStop(1, '#0f172a');
+          ictx.fillStyle = bgGrad;
+          ictx.fill();
+
+          const glow = ictx.createRadialGradient(134, 128, 12, 134, 128, 110);
+          glow.addColorStop(0, 'rgba(249, 115, 22, 0.72)');
+          glow.addColorStop(1, 'rgba(238, 77, 45, 0)');
+          ictx.fillStyle = glow;
+          ictx.fillRect(0, 0, 256, 256);
+
+          ictx.save();
+          ictx.transform(0.92, 0.24, 0, 1.02, 84, 34);
+          ictx.fillStyle = '#334155';
+          ictx.beginPath();
+          ictx.roundRect ? ictx.roundRect(7, 3, 94, 170, 15) : ictx.rect(7, 3, 94, 170);
+          ictx.fill();
+
+          ictx.fillStyle = '#f8fafc';
+          ictx.beginPath();
+          ictx.roundRect ? ictx.roundRect(0, 0, 94, 170, 15) : ictx.rect(0, 0, 94, 170);
+          ictx.fill();
+
+          ictx.fillStyle = '#0f172a';
+          ictx.beginPath();
+          ictx.roundRect ? ictx.roundRect(6, 13, 82, 138, 9) : ictx.rect(6, 13, 82, 138);
+          ictx.fill();
+
+          ictx.fillStyle = '#e2e8f0';
+          ictx.beginPath();
+          ictx.arc(33, 128, 11, 0, Math.PI * 2);
+          ictx.fill();
+          ictx.fillStyle = '#0f172a';
+          ictx.beginPath();
+          ictx.moveTo(30, 123);
+          ictx.lineTo(39, 128);
+          ictx.lineTo(30, 133);
+          ictx.closePath();
+          ictx.fill();
+
+          ictx.fillStyle = '#1e293b';
+          ictx.strokeStyle = '#94a3b8';
+          ictx.lineWidth = 1.5;
+          ictx.beginPath();
+          ictx.arc(62, 128, 11, 0, Math.PI * 2);
+          ictx.fill();
+          ictx.stroke();
+          ictx.fillStyle = '#e2e8f0';
+          ictx.fillRect(59.5, 122, 5, 8);
+          ictx.restore();
+
+          ictx.save();
+          ictx.transform(0.92, 0.24, 0, 1.02, 58, 80);
+          const cardGrad = ictx.createLinearGradient(0, 0, 62, 90);
+          cardGrad.addColorStop(0, '#ee4d2d');
+          cardGrad.addColorStop(0.65, '#ff7337');
+          cardGrad.addColorStop(1, '#facc15');
+          ictx.fillStyle = cardGrad;
+          ictx.beginPath();
+          ictx.roundRect ? ictx.roundRect(0, 0, 62, 90, 9) : ictx.rect(0, 0, 62, 90);
+          ictx.fill();
+
+          ictx.fillStyle = '#ffedd5';
+          ictx.fillRect(10, 20, 42, 40);
+          ictx.fillStyle = '#111827';
+          ictx.fillRect(12, 68, 38, 6);
+          ictx.restore();
+
+          return ic.toDataURL('image/png');
+        }
+
+        const embeddedIconPng = createEmbeddedAppIconDataUrl();
+        const headerLogoEl = document.getElementById('headerAppLogo');
+        const faviconEl = document.getElementById('appFavicon');
+        const appleIconEl = document.getElementById('appAppleIcon');
+
+        if (embeddedIconPng) {
+          if (appleIconEl) appleIconEl.href = embeddedIconPng;
+          if (headerLogoEl) {
+            headerLogoEl.onerror = () => {
+              headerLogoEl.onerror = null;
+              headerLogoEl.src = embeddedIconPng;
+            };
+            if (window.location.protocol === 'file:' || window.location.protocol === 'about:' || window.location.protocol === 'blob:') {
+              headerLogoEl.src = embeddedIconPng;
+              if (faviconEl) faviconEl.href = embeddedIconPng;
+            }
+          }
+        }
+
+        // =====================================================================
         // REFERENSI ELEMEN & KONFIGURASI STATE
         // =====================================================================
-        const apiKey = ""; // Otomatis disediakan environment saat runtime
+        const apiKey = ""; // Otomatis disediakan environment saat runtime (preview/share)
+        const API_KEY_STORAGE = 'shopee_vid_gemini_api_key';
+
         const canvas = document.getElementById('videoCanvas');
         if (!canvas) return;
         const ctx = canvas.getContext('2d', { alpha: false }) || canvas.getContext('2d');
@@ -645,6 +822,11 @@
         const downloadLinkBox = document.getElementById('downloadLinkBox');
         const manualDownloadAnchor = document.getElementById('manualDownloadAnchor');
         const voAudioStatus = document.getElementById('voAudioStatus');
+        const apiKeyDrawer = document.getElementById('apiKeyDrawer');
+        const toggleApiKeyBtn = document.getElementById('toggleApiKeyBtn');
+        const customApiKeyInput = document.getElementById('customApiKeyInput');
+        const saveApiKeyBtn = document.getElementById('saveApiKeyBtn');
+        const clearApiKeyBtn = document.getElementById('clearApiKeyBtn');
 
         let loadedImages = [];
         let animTimerId = null;
@@ -662,6 +844,7 @@
         let micRecorder = null;
         let micChunks = [];
         let isMicRecording = false;
+        let lastTtsError = '';
 
         const themes = {
           shopee: {
@@ -701,6 +884,93 @@
             hookText: '#090d16'
           }
         };
+
+        // =====================================================================
+        // PENGATURAN GEMINI API KEY (AMAN DI LOCALSTORAGE UNTUK GITHUB PAGES)
+        // =====================================================================
+        function getEffectiveApiKey() {
+          if (apiKey && apiKey.trim()) return apiKey.trim();
+          if (customApiKeyInput && customApiKeyInput.value.trim()) {
+            return customApiKeyInput.value.trim();
+          }
+          try {
+            return (localStorage.getItem(API_KEY_STORAGE) || '').trim();
+          } catch (e) {
+            return '';
+          }
+        }
+
+        function setVoPill(text, isWarn = false) {
+          if (!voAudioStatus) return;
+          if (!text) {
+            voAudioStatus.style.display = 'none';
+            return;
+          }
+          voAudioStatus.style.display = 'inline-block';
+          voAudioStatus.className = isWarn ? 'pill-info warn' : 'pill-info';
+          voAudioStatus.textContent = text;
+        }
+
+        function refreshApiKeyStatus() {
+          const effKey = getEffectiveApiKey();
+          const modeEl = document.getElementById('voSourceMode');
+          const mode = modeEl ? modeEl.value : 'ai_tts';
+
+          if (mode === 'custom_vo' && customVoBuffer) {
+            setVoPill(`✔ Audio VO kustom (${customVoBuffer.duration.toFixed(1)} dtk) siap masuk ke MP4`, false);
+            return;
+          }
+          if (effKey) {
+            setVoPill('✔ AI TTS Gemini aktif & siap masuk ke video MP4', false);
+          } else {
+            setVoPill('⚠ Mode GitHub Pages: Klik "🔑 API Key" untuk AI TTS di MP4, atau pakai "🎤 Rekam Mic / Upload VO". Preview tetap bersuara pakai TTS browser.', true);
+          }
+        }
+
+        try {
+          const savedKey = localStorage.getItem(API_KEY_STORAGE) || '';
+          if (savedKey && customApiKeyInput) {
+            customApiKeyInput.value = savedKey;
+          }
+        } catch (e) {}
+        refreshApiKeyStatus();
+
+        if (toggleApiKeyBtn && apiKeyDrawer) {
+          toggleApiKeyBtn.addEventListener('click', () => {
+            apiKeyDrawer.classList.toggle('open');
+          });
+        }
+
+        if (saveApiKeyBtn && customApiKeyInput) {
+          saveApiKeyBtn.addEventListener('click', () => {
+            const val = customApiKeyInput.value.trim();
+            if (!val) {
+              setStatus('Tempel Gemini API Key terlebih dahulu sebelum menyimpan.');
+              return;
+            }
+            try {
+              localStorage.setItem(API_KEY_STORAGE, val);
+            } catch (e) {}
+            cachedTtsKey = '';
+            cachedTtsBuffer = null;
+            if (apiKeyDrawer) apiKeyDrawer.classList.remove('open');
+            refreshApiKeyStatus();
+            setStatus('Gemini API Key disimpan di browser ini. Silakan klik "🔊 Tes Narasi" untuk menguji.');
+          });
+        }
+
+        if (clearApiKeyBtn && customApiKeyInput) {
+          clearApiKeyBtn.addEventListener('click', () => {
+            customApiKeyInput.value = '';
+            try {
+              localStorage.removeItem(API_KEY_STORAGE);
+            } catch (e) {}
+            cachedTtsKey = '';
+            cachedTtsBuffer = null;
+            refreshApiKeyStatus();
+            setStatus('Gemini API Key dihapus dari browser ini.');
+          });
+        }
 
         // =====================================================================
         // FUNGSI PEMBERSIHAN RESOURCE & HELPER UI
@@ -868,14 +1138,12 @@
             const voScript = (voScriptEl && voScriptEl.value) || '';
             const showSafeZone = (safeZoneEl ? safeZoneEl.checked : true) && !isRunning;
 
-            // Latar gradien tema
             const grad = ctx.createLinearGradient(0, 0, 0, H);
             grad.addColorStop(0, theme.bgTop);
             grad.addColorStop(1, theme.bgBot);
             ctx.fillStyle = grad;
             ctx.fillRect(0, 0, W, H);
 
-            // Kotak Hook Utama di bagian atas
             const hookBoxY = 110 * sf;
             const hookBoxH = 114 * sf;
             const hookBoxW = W - 80 * sf;
@@ -889,7 +1157,6 @@
             ctx.textBaseline = 'middle';
             wrapText(ctx, hookText, W / 2, hookBoxY + hookBoxH / 2, hookBoxW - 36 * sf, 36 * sf);
 
-            // Bingkai Foto Produk dengan animasi Ken Burns zoom halus
             const cardX = 56 * sf;
             const cardY = 248 * sf;
             const cardW = W - 112 * sf;
@@ -929,12 +1196,10 @@
               const drawY = innerY + (innerH - drawH) / 2;
               ctx.drawImage(img, drawX, drawY, drawW, drawH);
             } else {
-              // Render langsung secara sinkron tanpa menunggu Image.onload
               drawPlaceholderCard(ctx, innerX, innerY, innerW, innerH, zoom);
             }
             ctx.restore();
 
-            // Badge Harga / Promo (kapsul roundRect aman)
             const badgeW = 430 * sf;
             const badgeH = 58 * sf;
             const badgeX = (W - badgeW) / 2;
@@ -949,12 +1214,10 @@
             ctx.textBaseline = 'middle';
             ctx.fillText(priceTag, W / 2, badgeY + badgeH / 2 + 2 * sf);
 
-            // Nama Produk
             ctx.fillStyle = '#ffffff';
             ctx.font = `800 ${Math.round(32 * sf)}px sans-serif`;
             ctx.fillText(productName, W / 2, 868 * sf);
 
-            // Subtitle dinamis
             const hasSubtitle = voEnabled && voScript.trim().length > 0;
             if (hasSubtitle) {
               const subChunk = getSubtitleChunk(voScript, overallProgress);
@@ -972,7 +1235,6 @@
               }
             }
 
-            // Tombol Ajakan (CTA) dengan efek bounce
             const bounce = Math.sin(progress * Math.PI * 4) * 4 * sf;
             const ctaW = W - 120 * sf;
             const ctaH = 58 * sf;
@@ -987,7 +1249,6 @@
             ctx.font = `700 ${Math.round(23 * sf)}px sans-serif`;
             ctx.fillText(ctaText, W / 2, ctaY + ctaH / 2);
 
-            // Garis bantu Safe-Zone (hanya saat tidak merekam)
             if (showSafeZone) {
               ctx.save();
               ctx.strokeStyle = 'rgba(56, 189, 248, 0.85)';
@@ -1001,7 +1262,6 @@
           }
         }
 
-        // GAMBAR TAMPILAN AWAL KANVAS 9:16 SECARA SINKRON LANGSUNG SAAT SCRIPT DIJALANKAN
         drawFrame(0, 0.3, 0.1);
 
         // =====================================================================
@@ -1351,15 +1611,17 @@
               customVoBuffer = await decodeBytesToAudioBuffer(ab);
               const modeEl = document.getElementById('voSourceMode');
               if (modeEl) modeEl.value = 'custom_vo';
-              if (voAudioStatus) {
-                voAudioStatus.style.display = 'inline-block';
-                voAudioStatus.textContent = `✔ File VO siap masuk ke MP4: ${file.name}`;
-              }
+              setVoPill(`✔ File VO siap masuk ke MP4: ${file.name}`, false);
               setStatus(`File VO "${file.name}" berhasil dimuat.`);
             } catch (err) {
               setStatus('Gagal memproses file VO. Gunakan MP3/WAV/M4A.');
             }
           });
+        }
+
+        const voSourceModeEl = document.getElementById('voSourceMode');
+        if (voSourceModeEl) {
+          voSourceModeEl.addEventListener('change', refreshApiKeyStatus);
         }
 
         const recordMicBtn = document.getElementById('recordMicBtn');
@@ -1388,10 +1650,7 @@
                   customVoBuffer = await decodeBytesToAudioBuffer(ab);
                   const modeEl = document.getElementById('voSourceMode');
                   if (modeEl) modeEl.value = 'custom_vo';
-                  if (voAudioStatus) {
-                    voAudioStatus.style.display = 'inline-block';
-                    voAudioStatus.textContent = `✔ Rekaman Mic (${customVoBuffer.duration.toFixed(1)} dtk) siap masuk ke MP4!`;
-                  }
+                  setVoPill(`✔ Rekaman Mic (${customVoBuffer.duration.toFixed(1)} dtk) siap masuk ke MP4!`, false);
                   setStatus('Rekaman suara selesai & siap digabung ke video MP4.');
                 } catch (err) {
                   setStatus('Gagal mendekode rekaman suara mic.');
@@ -1412,7 +1671,7 @@
         }
 
         // =====================================================================
-        // 3. AI VOICE OVER (GEMINI TTS -> PCM TO AUDIOBUFFER + FALLBACK SYNTH)
+        // 3. AI VOICE OVER (GEMINI TTS -> PCM TO AUDIOBUFFER + WEB SPEECH FALLBACK)
         // =====================================================================
         function base64ToUint8Array(base64) {
           const bin = atob(base64);
@@ -1435,42 +1694,38 @@
           return audioBuf;
         }
 
-        function synthesizeExpressiveFallbackVoiceBuffer(script, targetDurationSec = 4.5) {
-          const sampleRate = 22050;
+        function speakWithBrowserTts(script) {
+          if (!('speechSynthesis' in window)) return false;
           const clean = String(script || '').trim();
-          const words = clean ? clean.split(/\s+/) : ['promo', 'shopee', 'hari', 'ini'];
-          const estimatedDur = Math.max(2.0, Math.min(targetDurationSec, words.length * 0.28));
-          const totalSamples = Math.floor(estimatedDur * sampleRate);
-          const buf = new AudioBuffer({ length: totalSamples, numberOfChannels: 1, sampleRate });
-          const data = buf.getChannelData(0);
-
-          let cursor = Math.floor(0.12 * sampleRate);
-          for (let w = 0; w < words.length && cursor < totalSamples; w++) {
-            const word = words[w];
-            const syllables = Math.max(1, Math.min(4, Math.ceil(word.length / 3)));
-            for (let s = 0; s < syllables && cursor < totalSamples; s++) {
-              const sylLen = Math.floor((0.085 + (s === syllables - 1 ? 0.03 : 0)) * sampleRate);
-              const baseFreq = 185 + ((w * 19 + s * 27) % 65);
-              for (let i = 0; i < sylLen && cursor + i < totalSamples; i++) {
-                const t = i / sampleRate;
-                const env = Math.sin(Math.PI * (i / sylLen));
-                const f0 = baseFreq * (1 + 0.04 * Math.sin(2 * Math.PI * 5 * t));
-                const v1 = Math.sin(2 * Math.PI * f0 * t) * 0.55;
-                const v2 = Math.sin(2 * Math.PI * (f0 * 2.1) * t) * 0.28;
-                const v3 = Math.sin(2 * Math.PI * (f0 * 3.4) * t) * 0.12;
-                data[cursor + i] = (v1 + v2 + v3) * env * 0.22;
-              }
-              cursor += sylLen + Math.floor(0.025 * sampleRate);
-            }
-            cursor += Math.floor(0.06 * sampleRate);
+          if (!clean) return false;
+          try {
+            speechSynthesis.cancel();
+            const utter = new SpeechSynthesisUtterance(clean);
+            utter.lang = 'id-ID';
+            utter.rate = 1.04;
+            const voices = speechSynthesis.getVoices ? speechSynthesis.getVoices() : [];
+            const idVoice = voices.find((v) => /id[-_]ID/i.test(v.lang) || /indones/i.test(v.name));
+            if (idVoice) utter.voice = idVoice;
+            speechSynthesis.speak(utter);
+            return true;
+          } catch (e) {
+            return false;
           }
-          return buf;
         }
 
         async function fetchGeminiTtsAudioBuffer(script) {
+          lastTtsError = '';
           const clean = String(script || '').trim();
           if (!clean) return null;
-          if (cachedTtsKey === clean && cachedTtsBuffer) {
+
+          const effKey = getEffectiveApiKey();
+          if (!effKey) {
+            lastTtsError = 'NO_KEY';
+            return null;
+          }
+
+          const cacheSig = `${effKey.slice(-6)}::${clean}`;
+          if (cachedTtsKey === cacheSig && cachedTtsBuffer) {
             return cachedTtsBuffer;
           }
 
@@ -1489,13 +1744,13 @@
             model: 'gemini-2.5-flash-preview-tts'
           };
 
-          const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
+          const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${encodeURIComponent(effKey)}`;
           const delays = [600, 1200];
 
           for (let attempt = 0; attempt <= delays.length; attempt++) {
             try {
               const ctrl = new AbortController();
-              const timer = setTimeout(() => ctrl.abort(), 7000);
+              const timer = setTimeout(() => ctrl.abort(), 9000);
               const res = await fetch(url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -1504,7 +1759,12 @@
               });
               clearTimeout(timer);
 
-              if (!res.ok) throw new Error(`TTS HTTP ${res.status}`);
+              if (!res.ok) {
+                lastTtsError = `HTTP_${res.status}`;
+                if (res.status === 400 || res.status === 403) break;
+                throw new Error(`TTS HTTP ${res.status}`);
+              }
+
               const json = await res.json();
               const part = json?.candidates?.[0]?.content?.parts?.[0];
               const b64 = part?.inlineData?.data;
@@ -1516,10 +1776,11 @@
               const bytes = base64ToUint8Array(b64);
               const decodedBuf = pcm16BytesToAudioBuffer(bytes, sampleRate);
 
-              cachedTtsKey = clean;
+              cachedTtsKey = cacheSig;
               cachedTtsBuffer = decodedBuf;
               return decodedBuf;
             } catch (err) {
+              if (!lastTtsError) lastTtsError = err && err.message ? err.message : 'NETWORK_ERR';
               if (attempt === delays.length) break;
               await new Promise((r) => setTimeout(r, delays[attempt]));
             }
@@ -1527,15 +1788,20 @@
           return null;
         }
 
-        async function resolveNarrationAudioBuffer(totalDurationSec) {
+        async function resolveNarrationAudioBuffer() {
           const voEnableEl = document.getElementById('voEnable');
           if (voEnableEl && !voEnableEl.checked) return null;
 
           const modeEl = document.getElementById('voSourceMode');
           const mode = modeEl ? modeEl.value : 'ai_tts';
 
-          if (mode === 'custom_vo' && customVoBuffer) {
-            return customVoBuffer;
+          if (mode === 'custom_vo') {
+            if (customVoBuffer) {
+              setVoPill(`✔ Menggunakan VO kustom (${customVoBuffer.duration.toFixed(1)} dtk) ke MP4`, false);
+              return customVoBuffer;
+            }
+            setVoPill('⚠ Mode VO Kustom dipilih, tapi belum ada rekaman mic / file audio.', true);
+            return null;
           }
 
           const scriptEl = document.getElementById('voScript');
@@ -1544,19 +1810,18 @@
 
           const aiBuffer = await fetchGeminiTtsAudioBuffer(script);
           if (aiBuffer) {
-            if (voAudioStatus) {
-              voAudioStatus.style.display = 'inline-block';
-              voAudioStatus.textContent = `✔ AI Voice Over (${aiBuffer.duration.toFixed(1)} dtk) siap digabung ke MP4`;
-            }
+            setVoPill(`✔ AI Voice Over Gemini (${aiBuffer.duration.toFixed(1)} dtk) siap masuk ke MP4`, false);
             return aiBuffer;
           }
 
-          const synthBuf = synthesizeExpressiveFallbackVoiceBuffer(script, totalDurationSec);
-          if (voAudioStatus) {
-            voAudioStatus.style.display = 'inline-block';
-            voAudioStatus.textContent = 'ℹ Menggunakan sintesis vokal offline (atau rekam mic untuk suara asli)';
+          if (lastTtsError === 'NO_KEY') {
+            setVoPill('⚠ Belum ada Gemini API Key di GitHub Pages. Klik "🔑 API Key" atau gunakan "🎤 Rekam Mic / Upload VO" agar narasi ikut masuk ke MP4.', true);
+          } else if (lastTtsError === 'HTTP_400' || lastTtsError === 'HTTP_403') {
+            setVoPill('⚠ Gemini API Key tidak valid atau ditolak. Periksa kembali di tombol "🔑 API Key".', true);
+          } else {
+            setVoPill('⚠ AI TTS sedang tidak dapat dihubungi. Gunakan "🎤 Rekam Mic / Upload VO" agar suara tetap jernih di MP4.', true);
           }
-          return synthBuf;
+          return null;
         }
 
         async function renderMixedMasterAudioBuffer(totalDurationSec) {
@@ -1565,7 +1830,6 @@
           const totalSamples = Math.max(sampleRate, Math.ceil(totalDurationSec * sampleRate));
           const offlineCtx = new OfflineAudioContext(numChannels, totalSamples, sampleRate);
 
-          // 1. Mix Musik Latar
           const presetEl = document.getElementById('musicPreset');
           const preset = presetEl ? presetEl.value : 'upbeat';
 
@@ -1609,9 +1873,10 @@
             }
           }
 
-          // 2. Mix Narasi Voice Over ke jalur yang sama
-          const voBuffer = await resolveNarrationAudioBuffer(totalDurationSec);
+          const voBuffer = await resolveNarrationAudioBuffer();
+          let hasNarrationAudio = false;
           if (voBuffer) {
+            hasNarrationAudio = true;
             const voSrc = offlineCtx.createBufferSource();
             voSrc.buffer = voBuffer;
             const availableTime = Math.max(1.0, totalDurationSec - 0.2);
@@ -1625,7 +1890,8 @@
             voSrc.start(0.1);
           }
 
-          return await offlineCtx.startRendering();
+          const renderedBuffer = await offlineCtx.startRendering();
+          return { buffer: renderedBuffer, hasNarrationAudio };
         }
 
         function startSynthMusic(audioCtx, destinationNode, preset) {
@@ -1695,25 +1961,42 @@
         if (testVoiceBtn) {
           testVoiceBtn.addEventListener('click', async () => {
             cleanupPlayback();
+            const voEnableEl = document.getElementById('voEnable');
+            if (voEnableEl && !voEnableEl.checked) {
+              setStatus('Narasi sedang dinonaktifkan. Centang opsi narasi terlebih dahulu.');
+              return;
+            }
+            const script = (document.getElementById('voScript')?.value || '').trim();
+            if (!script && !customVoBuffer) {
+              setStatus('Naskah narasi kosong.');
+              return;
+            }
+
             setStatus('Menyiapkan & memutar tes suara narasi...');
             try {
-              const voBuf = await resolveNarrationAudioBuffer(6);
-              if (!voBuf) {
-                setStatus('Narasi dinonaktifkan atau naskah kosong.');
+              const voBuf = await resolveNarrationAudioBuffer();
+              if (voBuf) {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                activeAudioCtx = new AudioCtx();
+                if (activeAudioCtx.state === 'suspended') {
+                  await activeAudioCtx.resume();
+                }
+                const src = activeAudioCtx.createBufferSource();
+                src.buffer = voBuf;
+                src.connect(activeAudioCtx.destination);
+                src.onended = () => cleanupPlayback();
+                src.start(0);
+                activeBufferSources.push(src);
+                setStatus(`Memutar suara narasi (${voBuf.duration.toFixed(1)} detik)...`);
                 return;
               }
-              const AudioCtx = window.AudioContext || window.webkitAudioContext;
-              activeAudioCtx = new AudioCtx();
-              if (activeAudioCtx.state === 'suspended') {
-                await activeAudioCtx.resume();
+
+              // Fallback suara manusia bawaan browser Chrome/Android (bukan bunyi rusak)
+              if (speakWithBrowserTts(script)) {
+                setStatus('Memutar suara Bahasa Indonesia bawaan browser (untuk masuk ke MP4 di GitHub Pages, isi "🔑 API Key" atau gunakan "🎤 Rekam Mic").');
+              } else {
+                setStatus('Browser tidak mendukung TTS bawaan. Masukkan "🔑 API Key" atau gunakan "🎤 Rekam Mic / Upload VO".');
               }
-              const src = activeAudioCtx.createBufferSource();
-              src.buffer = voBuf;
-              src.connect(activeAudioCtx.destination);
-              src.onended = () => cleanupPlayback();
-              src.start(0);
-              activeBufferSources.push(src);
-              setStatus(`Memutar suara narasi (${voBuf.duration.toFixed(1)} detik)...`);
             } catch (err) {
               setStatus('Gagal memutar tes suara narasi.');
             }
@@ -2163,7 +2446,9 @@
           updateProgressUI(5, 'Menyiapkan Audio Preview...');
           setStatus('Menyiapkan narasi suara & musik latar untuk preview...');
 
-          const voBuf = await resolveNarrationAudioBuffer(totalSec);
+          const voBuf = await resolveNarrationAudioBuffer();
+          const voEnabled = document.getElementById('voEnable')?.checked;
+          const voScript = (document.getElementById('voScript')?.value || '').trim();
           const startTime = performance.now();
 
           try {
@@ -2198,6 +2483,8 @@
               vSrc.connect(activeAudioCtx.destination);
               vSrc.start(0.1);
               activeBufferSources.push(vSrc);
+            } else if (voEnabled && voScript) {
+              speakWithBrowserTts(voScript);
             }
           } catch (err) {}
 
@@ -2392,7 +2679,7 @@
           await audioEncoder.flush();
           audioEncoder.close();
 
-          setStatus(`Merender ${totalFrames} frame MP4 + Audio Narasi...`);
+          setStatus(`Merender ${totalFrames} frame MP4 + Audio...`);
           for (let i = 0; i < totalFrames; i++) {
             if (encodeError) throw encodeError;
 
@@ -2444,7 +2731,8 @@
           setStatus('Merender track audio Voice Over & musik latar...');
 
           try {
-            const mixedAudioBuffer = await renderMixedMasterAudioBuffer(totalSec);
+            const mixed = await renderMixedMasterAudioBuffer(totalSec);
+            const mixedAudioBuffer = mixed.buffer;
             updateProgressUI(16, 'Mengonversi ke format MP4...');
 
             let result = null;
@@ -2478,7 +2766,12 @@
             if (downloadLinkBox) downloadLinkBox.classList.add('show');
 
             updateProgressUI(100, `Selesai 100% (${result.ext.toUpperCase()})`);
-            setStatus(`Selesai! File ${fileName} (.${result.ext.toUpperCase()} + Suara Narasi) siap disimpan ke HP.`);
+            const voWanted = document.getElementById('voEnable')?.checked;
+            if (voWanted && !mixed.hasNarrationAudio) {
+              setStatus(`Selesai! ${fileName} siap disimpan (audio bersih tanpa suara rusak). Untuk memasukkan suara narasi AI ke MP4 di GitHub Pages, masukkan "🔑 API Key" atau gunakan "🎤 Rekam Mic / Upload VO".`);
+            } else {
+              setStatus(`Selesai! File ${fileName} (.${result.ext.toUpperCase()} + Suara Narasi Jernih) siap disimpan ke HP.`);
+            }
           } catch (err) {
             updateProgressUI(0, 'Gagal Generate Video');
             setStatus(`Gagal generate video: ${err && err.message ? err.message : err}`);
