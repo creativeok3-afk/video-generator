@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Shopee Video Generator 9:16 v3.9 — GitHub Pages TTS Fix</title>
+  <title>Shopee Video Generator 9:16 v3.14 — Multi AI TTS (Gemini, VoiceRSS, ElevenLabs)</title>
   <link id="appFavicon" rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%231e293b'/%3E%3Cstop offset='100%25' stop-color='%230f172a'/%3E%3C/linearGradient%3E%3CradialGradient id='glow' cx='52%25' cy='50%25' r='44%25'%3E%3Cstop offset='0%25' stop-color='%23f97316' stop-opacity='0.65'/%3E%3Cstop offset='100%25' stop-color='%23ee4d2d' stop-opacity='0'/%3E%3C/radialGradient%3E%3ClinearGradient id='card' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%23ee4d2d'/%3E%3Cstop offset='65%25' stop-color='%23ff7337'/%3E%3Cstop offset='100%25' stop-color='%23facc15'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='112' fill='url(%23bg)'/%3E%3Ccircle cx='266' cy='256' r='220' fill='url(%23glow)'/%3E%3Cg transform='matrix(0.92, 0.24, 0, 1.02, 168, 72)'%3E%3Crect x='14' y='6' width='186' height='334' rx='30' fill='%23334155'/%3E%3Crect x='0' y='0' width='186' height='334' rx='30' fill='%23f8fafc' stroke='%23cbd5e1' stroke-width='4'/%3E%3Crect x='12' y='26' width='162' height='274' rx='18' fill='%230f172a'/%3E%3Crect x='72' y='11' width='42' height='6' rx='3' fill='%2364748b'/%3E%3Ccircle cx='93' cy='316' r='10' fill='none' stroke='%2394a3b8' stroke-width='3'/%3E%3Cpath d='M93 135 L100 153 L118 160 L100 167 L93 185 L86 167 L68 160 L86 153 Z' fill='%2394a3b8'/%3E%3Ccircle cx='66' cy='256' r='22' fill='%23e2e8f0'/%3E%3Cpolygon points='60,245 78,256 60,267' fill='%230f172a'/%3E%3Ccircle cx='124' cy='256' r='22' fill='%231e293b' stroke='%2394a3b8' stroke-width='2.5'/%3E%3Crect x='119' y='244' width='10' height='15' rx='5' fill='%23e2e8f0'/%3E%3Cpath d='M114 254 A10 10 0 0 0 134 254' fill='none' stroke='%23e2e8f0' stroke-width='2.5'/%3E%3C/g%3E%3Cg transform='matrix(0.92, 0.24, 0, 1.02, 118, 162)'%3E%3Crect x='0' y='0' width='124' height='176' rx='18' fill='url(%23card)' stroke='%23fed7aa' stroke-width='2.5'/%3E%3Crect x='22' y='18' width='80' height='8' rx='4' fill='%23ffffff' opacity='0.85'/%3E%3Crect x='18' y='40' width='88' height='82' rx='12' fill='%23ffedd5' stroke='%23ffffff' stroke-width='3'/%3E%3Crect x='24' y='136' width='76' height='10' rx='5' fill='%23111827' opacity='0.85'/%3E%3Crect x='34' y='152' width='56' height='8' rx='4' fill='%23ffffff' opacity='0.9'/%3E%3C/g%3E%3C/svg%3E" />
   <link id="appAppleIcon" rel="apple-touch-icon" href="assets/app-icon.jpg" />
   <style>
@@ -456,7 +456,7 @@
       <h1>
         <img id="headerAppLogo" class="header-app-icon" src="assets/app-icon.jpg" alt="Ikon Shopee Video Generator" />
         <span>Shopee Video Generator</span>
-        <span class="badge">v3.9 • GitHub Pages TTS Fix</span>
+        <span class="badge">v3.14 • Multi AI TTS</span>
       </h1>
       <div style="font-size:0.8rem; color:#94a3b8;">Output: .MP4 (H.264 + Audio)</div>
     </header>
@@ -492,11 +492,22 @@
 
           <div class="import-drawer" id="importDrawer">
             <div class="form-group" style="margin-bottom:8px;">
-              <label for="csvFileInput">Pilih File CSV / TSV / TXT</label>
-              <input type="file" id="csvFileInput" accept=".csv,.tsv,.txt,text/csv,text/plain" />
+              <label for="csvFileInput">1. Pilih File CSV / TSV / TXT dari HP / PC</label>
+              <input type="file" id="csvFileInput" />
             </div>
             <div class="form-group" style="margin-bottom:8px;">
-              <label for="pasteSheetsArea">Atau Tempel Baris dari Sheets / CSV</label>
+              <label for="gdriveLinkInput">2. Atau Impor dari Link Google Drive / Google Sheets</label>
+              <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                <input type="text" id="gdriveLinkInput" placeholder="Tempel link Google Drive (.csv) atau Google Sheets..." style="flex:1; min-width:180px;" />
+                <button type="button" class="btn-mini green" id="fetchGdriveBtn">☁️ Ambil Link</button>
+              </div>
+              <div id="gdriveInlineStatus" class="pill-info" style="display:none; width:100%;"></div>
+              <div class="api-key-note" style="margin-top:4px; margin-bottom:0;">
+                Pastikan akses link Google Drive / Sheets sudah disetel ke <strong>"Siapa saja yang memiliki link (Pelihat)"</strong>.
+              </div>
+            </div>
+            <div class="form-group" style="margin-bottom:8px;">
+              <label for="pasteSheetsArea">3. Atau Tempel Baris dari Sheets / CSV</label>
               <textarea id="pasteSheetsArea" placeholder="Tempel baris dari Google Sheets atau CSV..."></textarea>
             </div>
             <div style="display:flex; gap:8px; justify-content:flex-end;">
@@ -546,15 +557,23 @@
             </div>
           </div>
 
-          <!-- Drawer Pengaturan Gemini API Key untuk GitHub Pages -->
+          <!-- Drawer Pengaturan Multi-Provider AI TTS API Key -->
           <div class="import-drawer" id="apiKeyDrawer" style="margin-top:0; margin-bottom:10px; padding-top:0; padding-bottom:10px; border-top:none; border-bottom:1px dashed var(--border);">
-            <div class="api-key-note">
+            <div class="form-group" style="margin-bottom:8px;">
+              <label for="ttsProviderSelect">Pilih Provider AI TTS</label>
+              <select id="ttsProviderSelect">
+                <option value="gemini" selected>Gemini AI TTS (Google AI Studio)</option>
+                <option value="voicerss">VoiceRSS TTS (Gratis 350 req/hari • Tanpa CC)</option>
+                <option value="elevenlabs">ElevenLabs TTS (Gratis 10.000 kar/bln • Natural)</option>
+              </select>
+            </div>
+            <div class="api-key-note" id="apiKeyHelperNote">
               Saat dibuka di <strong>GitHub Pages</strong>, masukkan <strong>Gemini API Key gratis</strong> dari
               <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer">Google AI Studio</a>
               agar suara AI TTS tetap jernih &amp; otomatis masuk ke file MP4. Key hanya disimpan di browser HP/PC Anda (tidak di-upload ke GitHub).
             </div>
             <div style="display:flex; gap:6px; flex-wrap:wrap;">
-              <input type="password" id="customApiKeyInput" placeholder="Tempel Gemini API Key (AIza...)" style="flex:1; min-width:180px;" />
+              <input type="password" id="customApiKeyInput" placeholder="Tempel API Key di sini..." style="flex:1; min-width:180px;" />
               <button type="button" class="btn-mini green" id="saveApiKeyBtn">💾 Simpan</button>
               <button type="button" class="btn-mini red" id="clearApiKeyBtn">Hapus</button>
             </div>
@@ -681,9 +700,6 @@
       'use strict';
 
       try {
-        // =====================================================================
-        // INISIALISASI IKON APLIKASI EMBEDDED + FALLBACK REPOSITORY GITHUB
-        // =====================================================================
         function createEmbeddedAppIconDataUrl() {
           const ic = document.createElement('canvas');
           ic.width = 256;
@@ -795,11 +811,30 @@
           }
         }
 
-        // =====================================================================
-        // REFERENSI ELEMEN & KONFIGURASI STATE
-        // =====================================================================
-        const apiKey = ""; // Otomatis disediakan environment saat runtime (preview/share)
-        const API_KEY_STORAGE = 'shopee_vid_gemini_api_key';
+        const apiKey = "";
+        const TTS_PROVIDER_STORAGE = 'shopee_vid_tts_provider';
+        const API_KEY_STORAGES = {
+          gemini: 'shopee_vid_gemini_api_key',
+          voicerss: 'shopee_vid_voicerss_api_key',
+          elevenlabs: 'shopee_vid_elevenlabs_api_key'
+        };
+        const PROVIDER_META = {
+          gemini: {
+            label: 'Gemini AI TTS',
+            placeholder: 'Tempel Gemini API Key (AIza...)',
+            noteHtml: 'Masukkan <strong>Gemini API Key gratis</strong> dari <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer">Google AI Studio</a>. Key disimpan lokal di browser Anda.'
+          },
+          voicerss: {
+            label: 'VoiceRSS TTS',
+            placeholder: 'Tempel VoiceRSS API Key (32 karakter)...',
+            noteHtml: 'Kuota gratis <strong>350 request/hari</strong> tanpa kartu kredit. Daftar gratis di <a href="https://www.voicerss.org/registration.aspx" target="_blank" rel="noopener noreferrer">voicerss.org</a> lalu tempel API Key di bawah.'
+          },
+          elevenlabs: {
+            label: 'ElevenLabs TTS',
+            placeholder: 'Tempel ElevenLabs API Key (sk_...)',
+            noteHtml: 'Kuota gratis <strong>10.000 karakter/bulan</strong> dengan suara Bahasa Indonesia natural. Ambil API Key di <a href="https://elevenlabs.io/app/settings/api-keys" target="_blank" rel="noopener noreferrer">ElevenLabs Settings</a>.'
+          }
+        };
 
         const canvas = document.getElementById('videoCanvas');
         if (!canvas) return;
@@ -824,6 +859,8 @@
         const voAudioStatus = document.getElementById('voAudioStatus');
         const apiKeyDrawer = document.getElementById('apiKeyDrawer');
         const toggleApiKeyBtn = document.getElementById('toggleApiKeyBtn');
+        const ttsProviderSelect = document.getElementById('ttsProviderSelect');
+        const apiKeyHelperNote = document.getElementById('apiKeyHelperNote');
         const customApiKeyInput = document.getElementById('customApiKeyInput');
         const saveApiKeyBtn = document.getElementById('saveApiKeyBtn');
         const clearApiKeyBtn = document.getElementById('clearApiKeyBtn');
@@ -845,6 +882,7 @@
         let micChunks = [];
         let isMicRecording = false;
         let lastTtsError = '';
+        let lastTtsDetail = '';
 
         const themes = {
           shopee: {
@@ -885,19 +923,38 @@
           }
         };
 
-        // =====================================================================
-        // PENGATURAN GEMINI API KEY (AMAN DI LOCALSTORAGE UNTUK GITHUB PAGES)
-        // =====================================================================
-        function getEffectiveApiKey() {
-          if (apiKey && apiKey.trim()) return apiKey.trim();
-          if (customApiKeyInput && customApiKeyInput.value.trim()) {
+        function getSelectedTtsProvider() {
+          const val = ttsProviderSelect ? ttsProviderSelect.value : 'gemini';
+          return PROVIDER_META[val] ? val : 'gemini';
+        }
+
+        function getEffectiveApiKey(provider = getSelectedTtsProvider()) {
+          if (provider === 'gemini' && apiKey && apiKey.trim()) {
+            return apiKey.trim();
+          }
+          if (provider === getSelectedTtsProvider() && customApiKeyInput && customApiKeyInput.value.trim()) {
             return customApiKeyInput.value.trim();
           }
           try {
-            return (localStorage.getItem(API_KEY_STORAGE) || '').trim();
+            return (localStorage.getItem(API_KEY_STORAGES[provider]) || '').trim();
           } catch (e) {
             return '';
           }
+        }
+
+        function syncProviderUi() {
+          const provider = getSelectedTtsProvider();
+          const meta = PROVIDER_META[provider] || PROVIDER_META.gemini;
+          if (apiKeyHelperNote) apiKeyHelperNote.innerHTML = meta.noteHtml;
+          if (customApiKeyInput) {
+            customApiKeyInput.placeholder = meta.placeholder;
+            try {
+              customApiKeyInput.value = (localStorage.getItem(API_KEY_STORAGES[provider]) || '').trim();
+            } catch (e) {
+              customApiKeyInput.value = '';
+            }
+          }
+          refreshApiKeyStatus();
         }
 
         function setVoPill(text, isWarn = false) {
@@ -912,7 +969,9 @@
         }
 
         function refreshApiKeyStatus() {
-          const effKey = getEffectiveApiKey();
+          const provider = getSelectedTtsProvider();
+          const meta = PROVIDER_META[provider] || PROVIDER_META.gemini;
+          const effKey = getEffectiveApiKey(provider);
           const modeEl = document.getElementById('voSourceMode');
           const mode = modeEl ? modeEl.value : 'ai_tts';
 
@@ -921,19 +980,32 @@
             return;
           }
           if (effKey) {
-            setVoPill('✔ AI TTS Gemini aktif & siap masuk ke video MP4', false);
+            setVoPill(`✔ ${meta.label} aktif & siap masuk ke video MP4`, false);
           } else {
-            setVoPill('⚠ Mode GitHub Pages: Klik "🔑 API Key" untuk AI TTS di MP4, atau pakai "🎤 Rekam Mic / Upload VO". Preview tetap bersuara pakai TTS browser.', true);
+            setVoPill(`⚠ ${meta.label} belum diisi API Key. Klik "🔑 API Key" untuk memilih provider / isi Key, atau pakai "🎤 Rekam Mic / Upload VO".`, true);
           }
         }
 
         try {
-          const savedKey = localStorage.getItem(API_KEY_STORAGE) || '';
-          if (savedKey && customApiKeyInput) {
-            customApiKeyInput.value = savedKey;
+          const savedProvider = localStorage.getItem(TTS_PROVIDER_STORAGE) || 'gemini';
+          if (ttsProviderSelect && PROVIDER_META[savedProvider]) {
+            ttsProviderSelect.value = savedProvider;
           }
         } catch (e) {}
-        refreshApiKeyStatus();
+        syncProviderUi();
+
+        if (ttsProviderSelect) {
+          ttsProviderSelect.addEventListener('change', () => {
+            const provider = getSelectedTtsProvider();
+            try {
+              localStorage.setItem(TTS_PROVIDER_STORAGE, provider);
+            } catch (e) {}
+            cachedTtsKey = '';
+            cachedTtsBuffer = null;
+            syncProviderUi();
+            setStatus(`Provider AI TTS diganti ke ${PROVIDER_META[provider].label}.`);
+          });
+        }
 
         if (toggleApiKeyBtn && apiKeyDrawer) {
           toggleApiKeyBtn.addEventListener('click', () => {
@@ -943,38 +1015,40 @@
 
         if (saveApiKeyBtn && customApiKeyInput) {
           saveApiKeyBtn.addEventListener('click', () => {
+            const provider = getSelectedTtsProvider();
+            const meta = PROVIDER_META[provider];
             const val = customApiKeyInput.value.trim();
             if (!val) {
-              setStatus('Tempel Gemini API Key terlebih dahulu sebelum menyimpan.');
+              setStatus(`Tempel API Key ${meta.label} terlebih dahulu sebelum menyimpan.`);
               return;
             }
             try {
-              localStorage.setItem(API_KEY_STORAGE, val);
+              localStorage.setItem(TTS_PROVIDER_STORAGE, provider);
+              localStorage.setItem(API_KEY_STORAGES[provider], val);
             } catch (e) {}
             cachedTtsKey = '';
             cachedTtsBuffer = null;
             if (apiKeyDrawer) apiKeyDrawer.classList.remove('open');
             refreshApiKeyStatus();
-            setStatus('Gemini API Key disimpan di browser ini. Silakan klik "🔊 Tes Narasi" untuk menguji.');
+            setStatus(`API Key ${meta.label} disimpan di browser ini. Silakan klik "🔊 Tes Narasi" untuk menguji.`);
           });
         }
 
         if (clearApiKeyBtn && customApiKeyInput) {
           clearApiKeyBtn.addEventListener('click', () => {
+            const provider = getSelectedTtsProvider();
+            const meta = PROVIDER_META[provider];
             customApiKeyInput.value = '';
             try {
-              localStorage.removeItem(API_KEY_STORAGE);
+              localStorage.removeItem(API_KEY_STORAGES[provider]);
             } catch (e) {}
             cachedTtsKey = '';
             cachedTtsBuffer = null;
             refreshApiKeyStatus();
-            setStatus('Gemini API Key dihapus dari browser ini.');
+            setStatus(`API Key ${meta.label} dihapus dari browser ini.`);
           });
         }
 
-        // =====================================================================
-        // FUNGSI PEMBERSIHAN RESOURCE & HELPER UI
-        // =====================================================================
         function cleanupPlayback() {
           try {
             if (animTimerId !== null) {
@@ -1018,9 +1092,6 @@
           if (statusBar) statusBar.textContent = msg;
         }
 
-        // =====================================================================
-        // HELPER KANVAS SINKRON (ANTI-BLANK 100%)
-        // =====================================================================
         function wrapText(context, text, x, y, maxWidth, lineHeight) {
           const words = String(text || '').split(/\s+/).filter(Boolean);
           if (!words.length) return;
@@ -1212,11 +1283,11 @@
             ctx.font = `900 ${Math.round(27 * sf)}px sans-serif`;
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText(priceTag, W / 2, badgeY + badgeH / 2 + 2 * sf);
+            ctx.fillText(priceTag, W / 2, badgeY + badgeH / 2 + 2 * sf, badgeW - 24 * sf);
 
             ctx.fillStyle = '#ffffff';
             ctx.font = `800 ${Math.round(32 * sf)}px sans-serif`;
-            ctx.fillText(productName, W / 2, 868 * sf);
+            ctx.fillText(productName, W / 2, 868 * sf, W - 80 * sf);
 
             const hasSubtitle = voEnabled && voScript.trim().length > 0;
             if (hasSubtitle) {
@@ -1231,7 +1302,7 @@
 
                 ctx.fillStyle = '#ffffff';
                 ctx.font = `700 ${Math.round(22 * sf)}px sans-serif`;
-                ctx.fillText(subChunk, W / 2, subY + subH / 2);
+                ctx.fillText(subChunk, W / 2, subY + subH / 2, subW - 24 * sf);
               }
             }
 
@@ -1247,7 +1318,7 @@
 
             ctx.fillStyle = '#fde047';
             ctx.font = `700 ${Math.round(23 * sf)}px sans-serif`;
-            ctx.fillText(ctaText, W / 2, ctaY + ctaH / 2);
+            ctx.fillText(ctaText, W / 2, ctaY + ctaH / 2, ctaW - 24 * sf);
 
             if (showSafeZone) {
               ctx.save();
@@ -1264,9 +1335,6 @@
 
         drawFrame(0, 0.3, 0.1);
 
-        // =====================================================================
-        // 1. IMPOR DATA PRODUK / SHEETS (CSV / TSV / TXT / PASTE / CONTOH)
-        // =====================================================================
         const toggleImportBtn = document.getElementById('toggleImportBtn');
         if (toggleImportBtn) {
           toggleImportBtn.addEventListener('click', () => {
@@ -1464,6 +1532,9 @@
         const loadSampleBtn = document.getElementById('loadSampleBtn');
         const parsePasteBtn = document.getElementById('parsePasteBtn');
         const csvFileInput = document.getElementById('csvFileInput');
+        const gdriveLinkInput = document.getElementById('gdriveLinkInput');
+        const fetchGdriveBtn = document.getElementById('fetchGdriveBtn');
+        const gdriveInlineStatus = document.getElementById('gdriveInlineStatus');
 
         if (loadSampleDirectBtn) loadSampleDirectBtn.addEventListener('click', loadSampleProducts);
         if (loadSampleBtn) loadSampleBtn.addEventListener('click', loadSampleProducts);
@@ -1483,12 +1554,23 @@
             try {
               const file = e.target.files && e.target.files[0];
               if (!file) return;
+              const lowerName = String(file.name || '').toLowerCase();
+              if (/\.(jpg|jpeg|png|webp|gif|mp4|mov|mp3|wav|pdf|zip)$/i.test(lowerName)) {
+                setStatus('File yang dipilih bukan teks/CSV. Pilih file .csv, .tsv, atau .txt.');
+                csvFileInput.value = '';
+                return;
+              }
               const reader = new FileReader();
               reader.onload = (ev) => {
-                const text = String(ev.target.result || '');
+                const text = String(ev.target.result || '').replace(/^\uFEFF/, '');
                 const area = document.getElementById('pasteSheetsArea');
                 if (area) area.value = text;
                 processImportedRows(parseDelimitedText(text));
+                csvFileInput.value = '';
+              };
+              reader.onerror = () => {
+                setStatus('Gagal membaca file CSV.');
+                csvFileInput.value = '';
               };
               reader.readAsText(file, 'UTF-8');
             } catch (err) {
@@ -1497,9 +1579,229 @@
           });
         }
 
-        // =====================================================================
-        // 2. UPLOAD 1–5 FOTO PRODUK & KOMPRESI HEMAT RAM HP
-        // =====================================================================
+        function setGdriveStatus(msg, isWarn = false) {
+          setStatus(msg);
+          if (!gdriveInlineStatus) return;
+          if (!msg) {
+            gdriveInlineStatus.style.display = 'none';
+            return;
+          }
+          gdriveInlineStatus.style.display = 'block';
+          gdriveInlineStatus.className = isWarn ? 'pill-info warn' : 'pill-info';
+          gdriveInlineStatus.textContent = msg;
+        }
+
+        function fetchGoogleSheetViaJsonp(sheetId, gid) {
+          return new Promise((resolve) => {
+            const cbName = `__gsheetCb_${Date.now()}_${Math.floor(Math.random() * 100000)}`;
+            const script = document.createElement('script');
+            let finished = false;
+
+            const cleanup = () => {
+              if (finished) return;
+              finished = true;
+              clearTimeout(timer);
+              try { delete window[cbName]; } catch (e) { window[cbName] = undefined; }
+              if (script.parentNode) script.parentNode.removeChild(script);
+            };
+
+            const timer = setTimeout(() => {
+              cleanup();
+              resolve(null);
+            }, 9000);
+
+            window[cbName] = (resp) => {
+              cleanup();
+              try {
+                if (!resp || resp.status === 'error' || !resp.table) {
+                  resolve(null);
+                  return;
+                }
+                const rows = [];
+                const cols = Array.isArray(resp.table.cols) ? resp.table.cols : [];
+                const headerLabels = cols.map((c) => String((c && c.label) || '').trim());
+                if (headerLabels.some((h) => h !== '')) {
+                  rows.push(headerLabels);
+                }
+                const tableRows = Array.isArray(resp.table.rows) ? resp.table.rows : [];
+                for (const r of tableRows) {
+                  const cells = Array.isArray(r && r.c) ? r.c : [];
+                  const rowVals = cells.map((cell) => {
+                    if (!cell) return '';
+                    if (cell.f !== undefined && cell.f !== null) return String(cell.f).trim();
+                    if (cell.v !== undefined && cell.v !== null) return String(cell.v).trim();
+                    return '';
+                  });
+                  if (rowVals.some((v) => v !== '')) rows.push(rowVals);
+                }
+                resolve(rows.length ? rows : null);
+              } catch (e) {
+                resolve(null);
+              }
+            };
+
+            script.onerror = () => {
+              cleanup();
+              resolve(null);
+            };
+
+            const gidPart = gid ? `&gid=${encodeURIComponent(gid)}` : '';
+            script.src = `https://docs.google.com/spreadsheets/d/${encodeURIComponent(sheetId)}/gviz/tq?tqx=out:json;responseHandler:${cbName}${gidPart}`;
+            document.head.appendChild(script);
+          });
+        }
+
+        function buildGdriveFetchCandidates(rawUrl) {
+          const url = String(rawUrl || '').trim();
+          if (!url) return [];
+
+          const withProxies = (target) => [
+            { url: target, mode: 'text' },
+            { url: `https://api.allorigins.win/get?url=${encodeURIComponent(target)}`, mode: 'allorigins_json' },
+            { url: `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(target)}`, mode: 'text' },
+            { url: `https://api.allorigins.win/raw?url=${encodeURIComponent(target)}`, mode: 'text' },
+            { url: `https://corsproxy.io/?url=${encodeURIComponent(target)}`, mode: 'text' }
+          ];
+
+          const pubSheetMatch = url.match(/docs\.google\.com\/spreadsheets\/d\/e\/([a-zA-Z0-9_-]+)/i);
+          if (pubSheetMatch) {
+            const pubId = pubSheetMatch[1];
+            const gidMatch = url.match(/[?&#]gid=(\d+)/i);
+            const gidQuery = gidMatch ? `&gid=${gidMatch[1]}` : '';
+            return withProxies(`https://docs.google.com/spreadsheets/d/e/${pubId}/pub?output=csv${gidQuery}`);
+          }
+
+          const sheetMatch = url.match(/docs\.google\.com\/spreadsheets\/d\/([a-zA-Z0-9_-]+)/i);
+          if (sheetMatch) {
+            const id = sheetMatch[1];
+            const gidMatch = url.match(/[?&#]gid=(\d+)/i);
+            const gidQuery = gidMatch ? `&gid=${gidMatch[1]}` : '';
+            return [
+              { url: `https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:csv${gidQuery}`, mode: 'text' },
+              ...withProxies(`https://docs.google.com/spreadsheets/d/${id}/export?format=csv${gidQuery}`)
+            ];
+          }
+
+          const driveMatch =
+            url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/i) ||
+            url.match(/drive\.google\.com\/(?:open|uc)\?[^#]*\bid=([a-zA-Z0-9_-]+)/i) ||
+            url.match(/drive\.usercontent\.google\.com\/download\?[^#]*\bid=([a-zA-Z0-9_-]+)/i);
+          if (driveMatch) {
+            const id = driveMatch[1];
+            const directUserContent = `https://drive.usercontent.google.com/download?id=${id}&export=download&confirm=t`;
+            const directUc = `https://drive.google.com/uc?export=download&id=${id}`;
+            return [
+              ...withProxies(directUserContent),
+              ...withProxies(directUc)
+            ];
+          }
+
+          return withProxies(url);
+        }
+
+        async function importFromGdriveLink() {
+          const rawUrl = gdriveLinkInput ? gdriveLinkInput.value.trim() : '';
+          if (!rawUrl) {
+            setGdriveStatus('Tempel link Google Drive atau Google Sheets terlebih dahulu.', true);
+            return;
+          }
+
+          if (fetchGdriveBtn) {
+            fetchGdriveBtn.disabled = true;
+            fetchGdriveBtn.textContent = '⏳ Mengambil...';
+          }
+          setGdriveStatus('Menghubungi Google Drive / Sheets...', false);
+
+          try {
+            const sheetMatch = rawUrl.match(/docs\.google\.com\/spreadsheets\/d\/(?!e\/)([a-zA-Z0-9_-]+)/i);
+            if (sheetMatch) {
+              const gidMatch = rawUrl.match(/[?&#]gid=(\d+)/i);
+              const jsonpRows = await fetchGoogleSheetViaJsonp(sheetMatch[1], gidMatch ? gidMatch[1] : '');
+              if (jsonpRows && jsonpRows.length) {
+                const csvPreview = jsonpRows
+                  .map((r) => r.map((c) => `"${String(c || '').replace(/"/g, '""')}"`).join(','))
+                  .join('\n');
+                const area = document.getElementById('pasteSheetsArea');
+                if (area) area.value = csvPreview;
+                processImportedRows(jsonpRows);
+                setGdriveStatus(`✔ Berhasil mengambil ${Math.max(1, importedProducts.length)} produk dari Google Sheets!`, false);
+                return;
+              }
+            }
+
+            const candidates = buildGdriveFetchCandidates(rawUrl);
+            if (!candidates.length) {
+              setGdriveStatus('Format link tidak dikenali. Pastikan link dari Google Drive / Sheets.', true);
+              return;
+            }
+
+            let csvText = '';
+            let gotHtmlLogin = false;
+
+            for (const item of candidates) {
+              try {
+                const ctrl = new AbortController();
+                const timer = setTimeout(() => ctrl.abort(), 8000);
+                const res = await fetch(item.url, { signal: ctrl.signal });
+                clearTimeout(timer);
+
+                if (!res.ok) continue;
+
+                let text = '';
+                if (item.mode === 'allorigins_json') {
+                  const data = await res.json();
+                  text = typeof data?.contents === 'string' ? data.contents : '';
+                } else {
+                  text = await res.text();
+                }
+
+                const trimmed = text.replace(/^\uFEFF/, '').trim();
+                if (!trimmed) continue;
+
+                if (/^<!doctype\s+html|^<html/i.test(trimmed)) {
+                  gotHtmlLogin = true;
+                  continue;
+                }
+
+                csvText = trimmed;
+                break;
+              } catch (fetchErr) {}
+            }
+
+            if (!csvText) {
+              if (gotHtmlLogin) {
+                setGdriveStatus('File masih terkunci (Private). Di Google Drive, klik Bagikan → ubah ke "Siapa saja yang memiliki link (Pelihat)", lalu coba lagi.', true);
+              } else {
+                setGdriveStatus('Link file Google Drive terblokir keamanan browser (CORS). Tip: Buka file CSV Anda dengan Google Sheets lalu tempel link Google Sheets-nya (pasti berhasil), atau salin isi CSV ke kotak Paste di bawah.', true);
+              }
+              return;
+            }
+
+            const area = document.getElementById('pasteSheetsArea');
+            if (area) area.value = csvText;
+            processImportedRows(parseDelimitedText(csvText));
+            setGdriveStatus(`✔ Berhasil mengambil ${importedProducts.length} produk dari link!`, false);
+          } finally {
+            if (fetchGdriveBtn) {
+              fetchGdriveBtn.disabled = false;
+              fetchGdriveBtn.textContent = '☁️ Ambil Link';
+            }
+          }
+        }
+
+        if (fetchGdriveBtn) {
+          fetchGdriveBtn.addEventListener('click', importFromGdriveLink);
+        }
+
+        if (gdriveLinkInput) {
+          gdriveLinkInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              importFromGdriveLink();
+            }
+          });
+        }
+
         if (imageInput) {
           imageInput.addEventListener('change', async (e) => {
             try {
@@ -1670,9 +1972,6 @@
           });
         }
 
-        // =====================================================================
-        // 3. AI VOICE OVER (GEMINI TTS -> PCM TO AUDIOBUFFER + WEB SPEECH FALLBACK)
-        // =====================================================================
         function base64ToUint8Array(base64) {
           const bin = atob(base64);
           const len = bin.length;
@@ -1686,7 +1985,14 @@
         function pcm16BytesToAudioBuffer(pcmBytes, sampleRate = 24000) {
           const samples = Math.floor(pcmBytes.byteLength / 2);
           const int16 = new Int16Array(pcmBytes.buffer, pcmBytes.byteOffset, samples);
-          const audioBuf = new AudioBuffer({ length: Math.max(1, samples), numberOfChannels: 1, sampleRate });
+          const len = Math.max(1, samples);
+          let audioBuf;
+          if (typeof AudioBuffer === 'function') {
+            audioBuf = new AudioBuffer({ length: len, numberOfChannels: 1, sampleRate });
+          } else {
+            const tmpOffline = new OfflineAudioContext(1, len, sampleRate);
+            audioBuf = tmpOffline.createBuffer(1, len, sampleRate);
+          }
           const ch0 = audioBuf.getChannelData(0);
           for (let i = 0; i < samples; i++) {
             ch0[i] = int16[i] / 32768.0;
@@ -1715,42 +2021,50 @@
 
         async function fetchGeminiTtsAudioBuffer(script) {
           lastTtsError = '';
+          lastTtsDetail = '';
           const clean = String(script || '').trim();
           if (!clean) return null;
 
-          const effKey = getEffectiveApiKey();
+          const effKey = getEffectiveApiKey('gemini');
           if (!effKey) {
             lastTtsError = 'NO_KEY';
             return null;
           }
 
-          const cacheSig = `${effKey.slice(-6)}::${clean}`;
+          const cacheSig = `gemini::${effKey.slice(-6)}::${clean}`;
           if (cachedTtsKey === cacheSig && cachedTtsBuffer) {
             return cachedTtsBuffer;
           }
 
-          const payload = {
-            contents: [{
-              parts: [{ text: `Bacakan dengan nada antusias, ramah, dan persuasif dalam Bahasa Indonesia: ${clean}` }]
-            }],
-            generationConfig: {
-              responseModalities: ['AUDIO'],
-              speechConfig: {
-                voiceConfig: {
-                  prebuiltVoiceConfig: { voiceName: 'Aoede' }
+          const ttsModels = [
+            { id: 'gemini-2.5-flash-preview-tts', verbatim: false },
+            { id: 'gemini-2.5-pro-preview-tts', verbatim: false }
+          ];
+
+          for (const modelCfg of ttsModels) {
+            const payload = {
+              contents: [{
+                parts: [{
+                  text: modelCfg.verbatim
+                    ? clean
+                    : `Bacakan dengan nada antusias, ramah, dan persuasif dalam Bahasa Indonesia: ${clean}`
+                }]
+              }],
+              generationConfig: {
+                responseModalities: ['AUDIO'],
+                speechConfig: {
+                  voiceConfig: {
+                    prebuiltVoiceConfig: { voiceName: 'Aoede' }
+                  }
                 }
               }
-            },
-            model: 'gemini-2.5-flash-preview-tts'
-          };
+            };
 
-          const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${encodeURIComponent(effKey)}`;
-          const delays = [600, 1200];
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(modelCfg.id)}:generateContent?key=${encodeURIComponent(effKey)}`;
 
-          for (let attempt = 0; attempt <= delays.length; attempt++) {
             try {
               const ctrl = new AbortController();
-              const timer = setTimeout(() => ctrl.abort(), 9000);
+              const timer = setTimeout(() => ctrl.abort(), 25000);
               const res = await fetch(url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -1760,29 +2074,227 @@
               clearTimeout(timer);
 
               if (!res.ok) {
+                let errMsg = '';
+                try {
+                  const errJson = await res.json();
+                  errMsg = errJson?.error?.message || '';
+                } catch (e) {}
+
                 lastTtsError = `HTTP_${res.status}`;
-                if (res.status === 400 || res.status === 403) break;
-                throw new Error(`TTS HTTP ${res.status}`);
+                lastTtsDetail = errMsg;
+
+                if (res.status === 403 || /api key not valid|invalid api key/i.test(errMsg)) {
+                  lastTtsError = 'INVALID_KEY';
+                  break;
+                }
+                continue;
               }
 
               const json = await res.json();
-              const part = json?.candidates?.[0]?.content?.parts?.[0];
-              const b64 = part?.inlineData?.data;
-              const mime = part?.inlineData?.mimeType || '';
-              if (!b64) throw new Error('Audio inlineData kosong');
+              const parts = json?.candidates?.[0]?.content?.parts || [];
+              const audioPart = parts.find((p) => p?.inlineData?.data);
+              const b64 = audioPart?.inlineData?.data;
+              const mime = String(audioPart?.inlineData?.mimeType || '').toLowerCase();
+              if (!b64) {
+                lastTtsError = 'EMPTY_AUDIO';
+                continue;
+              }
 
-              const rateMatch = mime.match(/rate=(\d+)/);
-              const sampleRate = rateMatch ? parseInt(rateMatch[1], 10) : 24000;
               const bytes = base64ToUint8Array(b64);
-              const decodedBuf = pcm16BytesToAudioBuffer(bytes, sampleRate);
+              let decodedBuf = null;
 
+              const isRiffWav =
+                bytes.length >= 12 &&
+                bytes[0] === 0x52 &&
+                bytes[1] === 0x49 &&
+                bytes[2] === 0x46 &&
+                bytes[3] === 0x46;
+
+              if (isRiffWav || /audio\/(wav|x-wav|mpeg|mp3|ogg|mp4|aac)/i.test(mime)) {
+                try {
+                  decodedBuf = await decodeBytesToAudioBuffer(
+                    bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength)
+                  );
+                } catch (decErr) {
+                  const pcmSlice = isRiffWav ? bytes.subarray(44) : bytes;
+                  decodedBuf = pcm16BytesToAudioBuffer(pcmSlice, 24000);
+                }
+              } else {
+                const rateMatch = mime.match(/rate=(\d+)/);
+                const sampleRate = rateMatch ? parseInt(rateMatch[1], 10) : 24000;
+                decodedBuf = pcm16BytesToAudioBuffer(bytes, sampleRate);
+              }
+
+              if (decodedBuf) {
+                cachedTtsKey = cacheSig;
+                cachedTtsBuffer = decodedBuf;
+                return decodedBuf;
+              }
+            } catch (err) {
+              if (err && err.name === 'AbortError') {
+                lastTtsError = 'TIMEOUT';
+                lastTtsDetail = 'Waktu tunggu server AI habis (25 detik)';
+              } else {
+                lastTtsError = 'NETWORK_ERR';
+                lastTtsDetail = err && err.message ? err.message : 'Koneksi gagal';
+              }
+            }
+          }
+          return null;
+        }
+
+        async function fetchVoiceRssTtsAudioBuffer(script) {
+          lastTtsError = '';
+          lastTtsDetail = '';
+          const clean = String(script || '').trim();
+          if (!clean) return null;
+
+          const effKey = getEffectiveApiKey('voicerss');
+          if (!effKey) {
+            lastTtsError = 'NO_KEY';
+            return null;
+          }
+
+          const cacheSig = `voicerss::${effKey.slice(-6)}::${clean}`;
+          if (cachedTtsKey === cacheSig && cachedTtsBuffer) {
+            return cachedTtsBuffer;
+          }
+
+          try {
+            const params = new URLSearchParams({
+              key: effKey,
+              hl: 'id-id',
+              v: 'Intan',
+              c: 'MP3',
+              f: '44khz_16bit_mono',
+              r: '0',
+              src: clean
+            });
+
+            const ctrl = new AbortController();
+            const timer = setTimeout(() => ctrl.abort(), 20000);
+            const res = await fetch('https://api.voicerss.org/', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+              body: params.toString(),
+              signal: ctrl.signal
+            });
+            clearTimeout(timer);
+
+            if (!res.ok) {
+              lastTtsError = `HTTP_${res.status}`;
+              return null;
+            }
+
+            const ab = await res.arrayBuffer();
+            const headStr = new TextDecoder().decode(new Uint8Array(ab.slice(0, 120)));
+            if (headStr.startsWith('ERROR:')) {
+              const errMsg = headStr.replace(/^ERROR:\s*/i, '').trim();
+              lastTtsDetail = errMsg;
+              if (/key|account|subscription/i.test(errMsg)) {
+                lastTtsError = 'INVALID_KEY';
+              } else if (/limit|quota|exceeded/i.test(errMsg)) {
+                lastTtsError = 'HTTP_429';
+              } else {
+                lastTtsError = 'VOICERSS_ERR';
+              }
+              return null;
+            }
+
+            const decodedBuf = await decodeBytesToAudioBuffer(ab);
+            cachedTtsKey = cacheSig;
+            cachedTtsBuffer = decodedBuf;
+            return decodedBuf;
+          } catch (err) {
+            if (err && err.name === 'AbortError') {
+              lastTtsError = 'TIMEOUT';
+              lastTtsDetail = 'Waktu tunggu server VoiceRSS habis';
+            } else {
+              lastTtsError = 'NETWORK_ERR';
+              lastTtsDetail = err && err.message ? err.message : 'Koneksi gagal';
+            }
+            return null;
+          }
+        }
+
+        async function fetchElevenLabsTtsAudioBuffer(script) {
+          lastTtsError = '';
+          lastTtsDetail = '';
+          const clean = String(script || '').trim();
+          if (!clean) return null;
+
+          const effKey = getEffectiveApiKey('elevenlabs');
+          if (!effKey) {
+            lastTtsError = 'NO_KEY';
+            return null;
+          }
+
+          const cacheSig = `elevenlabs::${effKey.slice(-6)}::${clean}`;
+          if (cachedTtsKey === cacheSig && cachedTtsBuffer) {
+            return cachedTtsBuffer;
+          }
+
+          const voiceId = 'EXAVITQu4vr4xnSDxMaL';
+          const models = ['eleven_flash_v2_5', 'eleven_multilingual_v2'];
+
+          for (const modelId of models) {
+            try {
+              const ctrl = new AbortController();
+              const timer = setTimeout(() => ctrl.abort(), 25000);
+              const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+                method: 'POST',
+                headers: {
+                  'xi-api-key': effKey,
+                  'Content-Type': 'application/json',
+                  'Accept': 'audio/mpeg'
+                },
+                body: JSON.stringify({
+                  text: clean,
+                  model_id: modelId,
+                  voice_settings: {
+                    stability: 0.5,
+                    similarity_boost: 0.75
+                  }
+                }),
+                signal: ctrl.signal
+              });
+              clearTimeout(timer);
+
+              if (!res.ok) {
+                let errMsg = '';
+                try {
+                  const errJson = await res.json();
+                  errMsg = errJson?.detail?.message || errJson?.detail || errJson?.error || '';
+                  if (typeof errMsg === 'object') errMsg = JSON.stringify(errMsg);
+                } catch (e) {}
+
+                lastTtsError = `HTTP_${res.status}`;
+                lastTtsDetail = String(errMsg || '');
+
+                if (res.status === 401 || res.status === 403) {
+                  lastTtsError = 'INVALID_KEY';
+                  break;
+                }
+                if (res.status === 429 || /quota_exceeded/i.test(lastTtsDetail)) {
+                  lastTtsError = 'HTTP_429';
+                  break;
+                }
+                continue;
+              }
+
+              const ab = await res.arrayBuffer();
+              const decodedBuf = await decodeBytesToAudioBuffer(ab);
               cachedTtsKey = cacheSig;
               cachedTtsBuffer = decodedBuf;
               return decodedBuf;
             } catch (err) {
-              if (!lastTtsError) lastTtsError = err && err.message ? err.message : 'NETWORK_ERR';
-              if (attempt === delays.length) break;
-              await new Promise((r) => setTimeout(r, delays[attempt]));
+              if (err && err.name === 'AbortError') {
+                lastTtsError = 'TIMEOUT';
+                lastTtsDetail = 'Waktu tunggu server ElevenLabs habis';
+              } else {
+                lastTtsError = 'NETWORK_ERR';
+                lastTtsDetail = err && err.message ? err.message : 'Koneksi gagal';
+              }
             }
           }
           return null;
@@ -1808,18 +2320,32 @@
           const script = scriptEl ? scriptEl.value.trim() : '';
           if (!script) return null;
 
-          const aiBuffer = await fetchGeminiTtsAudioBuffer(script);
+          const provider = getSelectedTtsProvider();
+          const meta = PROVIDER_META[provider] || PROVIDER_META.gemini;
+
+          let aiBuffer = null;
+          if (provider === 'voicerss') {
+            aiBuffer = await fetchVoiceRssTtsAudioBuffer(script);
+          } else if (provider === 'elevenlabs') {
+            aiBuffer = await fetchElevenLabsTtsAudioBuffer(script);
+          } else {
+            aiBuffer = await fetchGeminiTtsAudioBuffer(script);
+          }
+
           if (aiBuffer) {
-            setVoPill(`✔ AI Voice Over Gemini (${aiBuffer.duration.toFixed(1)} dtk) siap masuk ke MP4`, false);
+            setVoPill(`✔ ${meta.label} (${aiBuffer.duration.toFixed(1)} dtk) siap masuk ke MP4`, false);
             return aiBuffer;
           }
 
+          const shortDetail = lastTtsDetail ? ` (${String(lastTtsDetail).slice(0, 90)})` : '';
           if (lastTtsError === 'NO_KEY') {
-            setVoPill('⚠ Belum ada Gemini API Key di GitHub Pages. Klik "🔑 API Key" atau gunakan "🎤 Rekam Mic / Upload VO" agar narasi ikut masuk ke MP4.', true);
-          } else if (lastTtsError === 'HTTP_400' || lastTtsError === 'HTTP_403') {
-            setVoPill('⚠ Gemini API Key tidak valid atau ditolak. Periksa kembali di tombol "🔑 API Key".', true);
+            setVoPill(`⚠ API Key ${meta.label} belum diisi. Klik "🔑 API Key" untuk mengisi atau ganti provider lain.`, true);
+          } else if (lastTtsError === 'INVALID_KEY') {
+            setVoPill(`⚠ API Key ${meta.label} tidak valid / ditolak${shortDetail}. Periksa kembali di tombol "🔑 API Key".`, true);
+          } else if (lastTtsError === 'HTTP_429') {
+            setVoPill(`⚠ Kuota gratis ${meta.label} habis/penuh${shortDetail}. Klik "🔑 API Key" untuk pindah ke provider lain (VoiceRSS / ElevenLabs / Gemini).`, true);
           } else {
-            setVoPill('⚠ AI TTS sedang tidak dapat dihubungi. Gunakan "🎤 Rekam Mic / Upload VO" agar suara tetap jernih di MP4.', true);
+            setVoPill(`⚠ ${meta.label} gagal [${lastTtsError || 'ERR'}]${shortDetail}. Coba ganti provider di "🔑 API Key" atau pakai "🎤 Rekam Mic / Upload VO".`, true);
           }
           return null;
         }
@@ -1972,18 +2498,28 @@
               return;
             }
 
+            let localCtx = null;
+            try {
+              const AudioCtx = window.AudioContext || window.webkitAudioContext;
+              if (AudioCtx) {
+                localCtx = new AudioCtx();
+                activeAudioCtx = localCtx;
+                if (localCtx.state === 'suspended') {
+                  localCtx.resume().catch(() => {});
+                }
+              }
+            } catch (e) {}
+
             setStatus('Menyiapkan & memutar tes suara narasi...');
             try {
               const voBuf = await resolveNarrationAudioBuffer();
-              if (voBuf) {
-                const AudioCtx = window.AudioContext || window.webkitAudioContext;
-                activeAudioCtx = new AudioCtx();
-                if (activeAudioCtx.state === 'suspended') {
-                  await activeAudioCtx.resume();
+              if (voBuf && localCtx && localCtx.state !== 'closed') {
+                if (localCtx.state === 'suspended') {
+                  await localCtx.resume();
                 }
-                const src = activeAudioCtx.createBufferSource();
+                const src = localCtx.createBufferSource();
                 src.buffer = voBuf;
-                src.connect(activeAudioCtx.destination);
+                src.connect(localCtx.destination);
                 src.onended = () => cleanupPlayback();
                 src.start(0);
                 activeBufferSources.push(src);
@@ -1991,7 +2527,6 @@
                 return;
               }
 
-              // Fallback suara manusia bawaan browser Chrome/Android (bukan bunyi rusak)
               if (speakWithBrowserTts(script)) {
                 setStatus('Memutar suara Bahasa Indonesia bawaan browser (untuk masuk ke MP4 di GitHub Pages, isi "🔑 API Key" atau gunakan "🎤 Rekam Mic").');
               } else {
@@ -2046,9 +2581,6 @@
           });
         }
 
-        // =====================================================================
-        // 4. LISTENER KONTROL FORM REAL-TIME
-        // =====================================================================
         const resSelect = document.getElementById('resSelect');
         if (resSelect) {
           resSelect.addEventListener('change', (e) => {
@@ -2082,9 +2614,6 @@
           }
         });
 
-        // =====================================================================
-        // 5. PURE JAVASCRIPT LIGHTWEIGHT ISO-BMFF (.MP4) MUXER (ZERO CDN)
-        // =====================================================================
         class PureJsMp4Muxer {
           constructor(width, height, fps, sampleRate, numberOfChannels) {
             this.width = width;
@@ -2432,9 +2961,6 @@
           }
         }
 
-        // =====================================================================
-        // 6. PREVIEW ANIMASI & GENERATE VIDEO MP4 + SUARA NARASI
-        // =====================================================================
         async function runPreview() {
           cleanupPlayback();
 
@@ -2446,47 +2972,63 @@
           updateProgressUI(5, 'Menyiapkan Audio Preview...');
           setStatus('Menyiapkan narasi suara & musik latar untuk preview...');
 
+          let previewAudioCtx = null;
+          try {
+            const AudioCtx = window.AudioContext || window.webkitAudioContext;
+            if (AudioCtx) {
+              previewAudioCtx = new AudioCtx();
+              activeAudioCtx = previewAudioCtx;
+              if (previewAudioCtx.state === 'suspended') {
+                previewAudioCtx.resume().catch(() => {});
+              }
+            }
+          } catch (e) {}
+
           const voBuf = await resolveNarrationAudioBuffer();
           const voEnabled = document.getElementById('voEnable')?.checked;
           const voScript = (document.getElementById('voScript')?.value || '').trim();
           const startTime = performance.now();
 
           try {
-            const AudioCtx = window.AudioContext || window.webkitAudioContext;
-            activeAudioCtx = new AudioCtx();
-            if (activeAudioCtx.state === 'suspended') {
-              await activeAudioCtx.resume();
-            }
-
-            const preset = document.getElementById('musicPreset').value;
-            if (customAudioBuffer) {
-              const mSrc = activeAudioCtx.createBufferSource();
-              mSrc.buffer = customAudioBuffer;
-              mSrc.loop = true;
-              const mGain = activeAudioCtx.createGain();
-              mGain.gain.value = 0.28;
-              mSrc.connect(mGain);
-              mGain.connect(activeAudioCtx.destination);
-              mSrc.start(0);
-              activeBufferSources.push(mSrc);
-            } else if (preset !== 'none') {
-              activeStopSynth = startSynthMusic(activeAudioCtx, null, preset);
-            }
-
-            if (voBuf) {
-              const vSrc = activeAudioCtx.createBufferSource();
-              vSrc.buffer = voBuf;
-              const avail = Math.max(1.0, totalSec - 0.2);
-              if (voBuf.duration > avail) {
-                vSrc.playbackRate.value = Math.min(1.35, voBuf.duration / avail);
+            if (previewAudioCtx && previewAudioCtx.state !== 'closed') {
+              if (previewAudioCtx.state === 'suspended') {
+                await previewAudioCtx.resume();
               }
-              vSrc.connect(activeAudioCtx.destination);
-              vSrc.start(0.1);
-              activeBufferSources.push(vSrc);
+
+              const preset = document.getElementById('musicPreset').value;
+              if (customAudioBuffer) {
+                const mSrc = previewAudioCtx.createBufferSource();
+                mSrc.buffer = customAudioBuffer;
+                mSrc.loop = true;
+                const mGain = previewAudioCtx.createGain();
+                mGain.gain.value = 0.28;
+                mSrc.connect(mGain);
+                mGain.connect(previewAudioCtx.destination);
+                mSrc.start(0);
+                activeBufferSources.push(mSrc);
+              } else if (preset !== 'none') {
+                activeStopSynth = startSynthMusic(previewAudioCtx, null, preset);
+              }
+
+              if (voBuf) {
+                const vSrc = previewAudioCtx.createBufferSource();
+                vSrc.buffer = voBuf;
+                const avail = Math.max(1.0, totalSec - 0.2);
+                if (voBuf.duration > avail) {
+                  vSrc.playbackRate.value = Math.min(1.35, voBuf.duration / avail);
+                }
+                vSrc.connect(previewAudioCtx.destination);
+                vSrc.start(0.1);
+                activeBufferSources.push(vSrc);
+              } else if (voEnabled && voScript) {
+                speakWithBrowserTts(voScript);
+              }
             } else if (voEnabled && voScript) {
               speakWithBrowserTts(voScript);
             }
-          } catch (err) {}
+          } catch (err) {
+            console.error('Preview audio error:', err);
+          }
 
           setStatus(`Preview aktif (${totalSec.toFixed(1)} detik)...`);
 
